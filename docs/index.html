@@ -228,9 +228,13 @@ function parse(text) {
   for (const m of Object.keys(MEALS)) if (t.includes(` ${m} `)) q.meal = m;
 
   let m;
-  if ((m = t.match(/(?:under|below|less than|max|maximum|upto|up to|<|within)\s*(\d{2,4})/))) q.maxK = +m[1];
-  else if ((m = t.match(/(\d{3,4})\s*(?:k?cals?|kcal|calories)/)) && !/ (over|above|more than) /.test(t)) q.maxK = +m[1];
-  if ((m = t.match(/(\d{1,3})\s*g?\s*(?:grams? )?(?:of )?protein/)) || (m = t.match(/protein\s*(?:over|above|at least|min|>)?\s*(\d{1,3})/))) q.minP = +m[1];
+  if ((m = t.match(/(\d{1,3})\s*(?:g|gm|gms|grams?)?\s*(?:of\s+)?protein/)) || (m = t.match(/protein\s*(?:of|over|above|at least|min|>)?\s*(\d{1,3})/))) q.minP = +m[1];
+  if ((m = t.match(/(?:under|below|less than|max|maximum|upto|up to|<|within|around|about)\s*(\d{3,4})/))) q.maxK = +m[1];
+  else if ((m = t.match(/(\d{3,4})\s*(?:[a-z]{1,3}\s*)?(?:k?cals?|kcals?|calories|calorie)\b/))) q.maxK = +m[1];
+  else { // a bare 200-2500 number next to a protein goal is almost always calories
+    const n = (t.match(/\b\d{3,4}\b/g) || []).map(Number).find(x => x >= 200 && x <= 2500 && x !== q.minP);
+    if (n) q.maxK = n;
+  }
 
   q.avoid = [];
   for (const [label, words] of Object.entries(ALLERGEN_WORDS)) {
@@ -265,29 +269,47 @@ function allergenStatus(it, avoid) {
 const hasMeat = it => { const s = `${it.n} ${it.ing || ''}`.toLowerCase(); return MEAT.some(w => s.includes(w)); };
 const SIDE_CATS = /dessert|cookie|ice cream|condiment|beverage|drink|candy|snack|chips|soda|coffee|tea|shake/i;
 
+const MEAL_RE = {breakfast: /breakfast|brunch/i, brunch: /brunch|breakfast|lunch/i, lunch: /lunch|brunch/i, dinner: /dinner|supper/i};
+const BREAKFASTY = /breakfast|pancake|waffle|omelet|french toast|hash brown|oatmeal|cereal|bagel|muffin/i;
+function servedAt(it, meal) {
+  const named = (it.m || []).filter(x => /breakfast|brunch|lunch|dinner|supper/i.test(x));
+  if (named.length) return named.some(x => MEAL_RE[meal].test(x));
+  if (meal === 'lunch' || meal === 'dinner') return !BREAKFASTY.test(`${it.n} ${it.c}`);
+  return true;
+}
+function mealNow() {
+  const m = ames().mins;
+  return m < 630 ? 'breakfast' : m < 900 ? 'lunch' : 'dinner';
+}
+
 function plan(items, o) {
   let pool = [], exC = 0, exU = 0, exM = 0;
   for (const it of items) {
     if (it.k == null || it.k <= 0) continue;
     if (o.skipSides && SIDE_CATS.test(it.c)) continue;
+    if (o.meal && !servedAt(it, o.meal)) continue;
     if (o.noMeat && hasMeat(it)) { exM++; continue; }
     const s = allergenStatus(it, o.avoid);
     if (s === 'unknown') exU++; else if (s === 'contains') exC++; else pool.push(it);
   }
   const K = c => c.reduce((s, i) => s + (i.k || 0), 0), P = c => c.reduce((s, i) => s + (i.p || 0), 0);
-  const score = c => o.opt === 'low' ? -K(c) + 0.5 * P(c) : o.opt === 'bal' ? P(c) - 0.03 * K(c) : P(c) - 0.001 * K(c);
+  // protein goal with no calorie limit: reach it with the fewest calories
+  const opt = o.minP && !o.maxK && o.opt === 'protein' ? 'low' : o.opt;
+  const score = c => opt === 'low' ? -K(c) + 0.5 * P(c) : opt === 'bal' ? P(c) - 0.03 * K(c) : P(c) - 0.001 * K(c);
   const groups = {};
   pool.forEach(i => (groups[i.c] = groups[i.c] || []).push(i));
-  const capK = o.maxK || Infinity, maxItems = o.maxItems || 4;
+  const capK = o.maxK || 900, maxItems = o.maxItems || 3;
   let beam = [[]];
   for (const g of Object.values(groups)) {
     const top = g.sort((a, b) => score([b]) - score([a])).slice(0, 6), next = [...beam];
     for (const c of beam) if (c.length < maxItems) for (const it of top) { const n = [...c, it]; if (K(n) <= capK) next.push(n); }
     beam = next.sort((a, b) => score(b) - score(a)).slice(0, 250);
   }
-  const ok = c => c.length >= 2 && (o.minP == null || P(c) >= o.minP);
+  const minItems = o.maxK || o.minP ? 1 : 2;
+  const ok = c => c.length >= minItems && (o.minP == null || P(c) >= o.minP);
   const feas = beam.filter(ok), rest = beam.filter(c => c.length);
-  const best = (feas.length ? feas : rest).sort((a, b) => score(b) - score(a))[0] || [];
+  // no combo meets the goal: show the most protein we can get instead
+  const best = (feas.length ? feas.sort((a, b) => score(b) - score(a)) : rest.sort((a, b) => P(b) - P(a) || K(a) - K(b)))[0] || [];
   return {best, met: feas.length > 0, k: K(best), p: P(best), s: best.length ? score(best) : -Infinity,
     f: best.some(i => i.f != null) ? best.reduce((s, i) => s + (i.f || 0), 0) : null, exC, exU, exM};
 }
@@ -398,34 +420,49 @@ async function answerPlan(q) {
   const today = ames().date;
   let day = q.dayExplicit ? q.day : today;
   if (q.venue && !q.dayExplicit && statusNow(q.venue).state === 'closed' && statusNow(q.venue).nextDay) day = statusNow(q.venue).nextDay;
+  const meal = q.meal || (day === today ? mealNow() : null);
   const items = await menu(day);
   let venues = q.venue ? [q.venue] : VIDS().filter(v => windows(day, v).length && (day !== today || statusNow(v).state !== 'closed'));
-  if (q.meal && !q.venue) {
-    const [a, b] = MEALS[q.meal];
+  if (meal && !q.venue) {
+    const [a, b] = MEALS[meal];
     venues = venues.filter(v => windows(day, v).some(w => w.all_day || (toMin(w.s) < b && toMin(w.e) > a)));
   }
-  if (!venues.length) return {say: `Nothing is open ${day === today ? 'for the rest of today' : dayLabel(day)} to build a meal from.`, chips: ['High protein lunch tomorrow']};
-  const opts = {maxK: q.maxK, minP: q.minP, avoid: q.avoid, noMeat: q.noMeat, opt: q.opt, maxItems: / bowl /.test(q.t) ? 5 : 4,
-    skipSides: !q.food.some(f => SIDE_CATS.test(f))};
+  const when = `${meal ? meal + ' ' : ''}${dayLabel(day)}`.replace('dinner today', 'dinner tonight');
+  if (!venues.length) return {say: `Nothing is open for ${when}.`, chips: ['What’s open now?']};
+
+  const opts = {maxK: q.maxK, minP: q.minP, avoid: q.avoid, noMeat: q.noMeat, opt: q.opt, meal,
+    maxItems: / bowl /.test(q.t) ? 5 : 3, skipSides: !q.food.some(f => SIDE_CATS.test(f))};
   const results = venues.map(v => ({v, r: plan(items.filter(i => String(i.v) === v), opts)})).filter(x => x.r.best.length);
-  if (!results.length) return {say: q.venue ? `No menu posted for <b>${esc(vname(q.venue))}</b> ${dayLabel(day)} yet.` : `No menus posted for ${dayLabel(day)} yet.`};
+  if (!results.length) return {say: `No menus posted for ${when} yet.`};
   results.sort((a, b) => (b.r.met - a.r.met) || (b.r.s - a.r.s));
-  const {v, r} = results[0];
-  const goals = [q.maxK ? `under ${q.maxK} kcal` : '', q.minP ? `${q.minP}g+ protein` : '', q.avoid.length ? `no ${q.avoid.join(', ').toLowerCase()}` : '', q.noMeat ? 'no meat' : ''].filter(Boolean).join(', ');
-  const say = r.met ? `${q.venue ? 'Here’s your meal' : 'Best pick'} at <b>${esc(vname(v))}</b>${goals ? ` (${goals})` : ''}:` : `Couldn’t hit every goal${goals ? ` (${goals})` : ''}. Closest at <b>${esc(vname(v))}</b>:`;
-  const when = day === today ? statusBadge(statusNow(v)) : `<span class="badge b-off">${cap(dayLabel(day))}</span>`;
-  const notes = [];
-  if (r.exC) notes.push(`removed ${r.exC} items with your allergens`);
-  if (r.exU) notes.push(`skipped ${r.exU} with no allergen info`);
-  if (r.exM) notes.push(`skipped ${r.exM} with meat`);
-  if (q.vegan) notes.push('vegan isn’t labeled in ISU data, so this is dairy, egg and meat free by ingredients. Double check with staff');
-  const alts = results.slice(1, 3).map(x => `<div class="row">${vlink(x.v)}<span class="nums">${Math.round(x.r.k)} kcal · ${Math.round(x.r.p)}g protein</span></div>`);
-  return {say, html: `<div class="card"><div class="row">${vlink(v)}${when}</div><div class="dim">${esc(hoursText(day, v))}</div>
-      ${r.best.map(it => `<div class="item"><div>${esc(it.n)} <span class="dim">· ${esc(it.c)}</span></div><div class="nums">${Math.round(it.k)} kcal · ${it.p ?? '?'}g protein</div>${it.a ? `<div class="allg">Contains: ${esc(it.a)}</div>` : ''}</div>`).join('')}
-      <div class="total row"><span>Total</span><span>${Math.round(r.k)} kcal · ${Math.round(r.p)}g protein${r.f != null ? ` · ${Math.round(r.f)}g fat` : ''}</span></div>
-      ${notes.length ? `<div class="note">${cap(notes.join('; '))}.</div>` : ''}</div>
-      ${alts.length ? `<div class="card list"><div class="dim" style="margin-bottom:4px">Also good</div>${alts.join('')}</div>` : ''}`,
-    chips: [q.maxK ? `Same but under ${Math.max(300, q.maxK - 150)} cal` : 'Same but under 600 cal', q.avoid.includes('Dairy') ? 'Same but no gluten' : 'Same but no dairy', `What’s at ${vname(v)}?`]};
+  const hits = results.filter(x => x.r.met);
+
+  const goals = [q.minP ? `${q.minP}g+ protein` : '', q.maxK ? `under ${q.maxK} kcal` : '', q.avoid.length ? `no ${q.avoid.join(', ').toLowerCase()}` : '', q.noMeat ? 'no meat' : ''].filter(Boolean).join(', ');
+  const names = venues.map(v => vname(v));
+  const openList = names.length <= 4 ? names.join(', ') : `${names.slice(0, 4).join(', ')} +${names.length - 4} more`;
+  let say = q.venue ? '' : `Open for ${when}: <b>${esc(openList)}</b>.<br>`;
+  if (hits.length) say += q.venue ? `Here’s a meal at <b>${esc(vname(q.venue))}</b>${goals ? ` (${goals})` : ''}:`
+    : goals ? `${hits.length === 1 ? 'Only 1 place hits' : `${Math.min(hits.length, 3)} best options for`} ${goals}:` : `Top ${q.opt === 'low' ? 'light' : q.opt === 'bal' ? 'balanced' : 'high protein'} picks:`;
+  else say += `Nothing hits ${goals || 'that'} exactly. Closest (most protein):`;
+
+  const card = ({v, r}) => {
+    const badge = day === today ? statusBadge(statusNow(v)) : `<span class="badge b-off">${cap(dayLabel(day))}</span>`;
+    const notes = [];
+    if (r.exC) notes.push(`removed ${r.exC} with your allergens`);
+    if (r.exU) notes.push(`skipped ${r.exU} with no allergen info`);
+    return `<div class="card"><div class="row">${vlink(v)}${badge}</div>
+      ${r.best.map(it => `<div class="item"><div class="row"><span>${esc(it.n)}</span><span class="nums">${Math.round(it.k)} kcal · ${it.p ?? '?'}g</span></div>${it.a ? `<div class="allg">Contains: ${esc(it.a)}</div>` : ''}</div>`).join('')}
+      <div class="total row"><span>Total</span><span>${Math.round(r.k)} kcal · ${Math.round(r.p)}g protein</span></div>
+      ${notes.length ? `<div class="note">${cap(notes.join('; '))}.</div>` : ''}</div>`;
+  };
+  const shown = (hits.length ? hits : results).slice(0, q.venue ? 1 : 3);
+  let html = shown.map(card).join('');
+  if (q.vegan) html += '<div class="note">Vegan isn’t labeled in ISU data. These are dairy, egg and meat free by ingredients. Double check with staff.</div>';
+  const other = shown[0].v;
+  return {say, html, chips: [
+    q.maxK ? `Same but under ${Math.max(300, q.maxK - 150)} cal` : 'Same but under 600 cal',
+    q.avoid.includes('Dairy') ? 'Same but no gluten' : 'Same but no dairy',
+    `What’s at ${vname(other)}?`]};
 }
 
 function answerMealTime(q) {
