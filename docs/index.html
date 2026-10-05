@@ -1,1 +1,344 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#B23A2E">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<title>Dining Now · Ames</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🌾</text></svg>">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #F4F0E6; --card: #FFFDF8; --ink: #1E1A16; --muted: #6E665B; --line: #E4DDCD;
+  --accent: #B23A2E; --accent-ink: #fff; --gold: #E9B949; --ok: #2F7D4F; --warn: #B4621A;
+  --head: 'Bricolage Grotesque', 'Inter', system-ui, sans-serif;
+  --body: 'Inter', system-ui, -apple-system, 'Segoe UI', sans-serif;
+}
+@media (prefers-color-scheme: dark) {
+  :root { --bg: #17130F; --card: #221D18; --ink: #F2ECE2; --muted: #A69C8E; --line: #3A322A;
+          --accent: #E0584A; --gold: #E9B949; --ok: #5BBF85; --warn: #E39A55; }
+}
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--ink); font: 15px/1.5 var(--body); }
+body { padding: env(safe-area-inset-top) 0 calc(76px + env(safe-area-inset-bottom)); }
+.wrap { max-width: 640px; margin: 0 auto; padding: 0 16px; }
+header { padding: 22px 0 10px; }
+h1 { font: 800 1.9rem/1 var(--head); margin: 0; letter-spacing: -0.02em; }
+h1 span { color: var(--accent); }
+.sub { color: var(--muted); font-size: .82rem; margin-top: 6px; }
+h2 { font: 600 1.15rem/1.2 var(--head); margin: 22px 0 10px; }
+.card { background: var(--card); border: 1px solid var(--line); border-radius: 14px; padding: 12px 14px; margin-bottom: 10px; }
+.row { display: flex; justify-content: space-between; align-items: baseline; gap: 10px; }
+.vname { font-weight: 600; }
+.vname.link { cursor: pointer; }
+.vname.link:hover { color: var(--accent); }
+.dim { color: var(--muted); font-size: .85rem; }
+.badge { font-size: .72rem; font-weight: 600; padding: 2px 8px; border-radius: 999px; white-space: nowrap; }
+.b-open { background: color-mix(in srgb, var(--ok) 15%, transparent); color: var(--ok); }
+.b-soon { background: color-mix(in srgb, var(--warn) 18%, transparent); color: var(--warn); }
+.empty { color: var(--muted); padding: 10px 0; }
+nav { position: fixed; left: 0; right: 0; bottom: 0; background: var(--card); border-top: 1px solid var(--line);
+      padding: 6px 8px calc(6px + env(safe-area-inset-bottom)); z-index: 5; }
+nav .wrap { display: grid; grid-template-columns: repeat(4, 1fr); gap: 4px; padding: 0; }
+nav button { background: none; border: 0; color: var(--muted); font: 600 .78rem var(--body); padding: 6px 0; border-radius: 10px; cursor: pointer; }
+nav button .ic { display: block; font-size: 1.25rem; line-height: 1.3; }
+nav button.on { color: var(--accent); background: color-mix(in srgb, var(--accent) 10%, transparent); }
+section { display: none; } section.on { display: block; }
+select, input[type=text], input[type=number] {
+  width: 100%; font: inherit; color: var(--ink); background: var(--card); border: 1px solid var(--line);
+  border-radius: 10px; padding: 10px 12px; }
+label.f { display: block; font-size: .8rem; font-weight: 600; color: var(--muted); margin: 12px 0 4px; }
+.grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 6px 0; }
+.chip { border: 1px solid var(--line); background: var(--card); color: var(--ink); border-radius: 999px;
+        padding: 6px 12px; font: 500 .82rem var(--body); cursor: pointer; user-select: none; }
+.chip.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.btn { width: 100%; margin-top: 14px; background: var(--accent); color: var(--accent-ink); border: 0; border-radius: 12px;
+       padding: 13px; font: 600 1rem var(--body); cursor: pointer; }
+details { border-top: 1px solid var(--line); padding: 8px 0; }
+details:first-of-type { border-top: 0; }
+summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; }
+summary::-webkit-details-marker { display: none; }
+.item { padding: 7px 0; border-bottom: 1px dashed var(--line); }
+.item:last-child { border-bottom: 0; }
+.nums { font-variant-numeric: tabular-nums; color: var(--muted); font-size: .82rem; }
+.allg { font-size: .75rem; color: var(--warn); }
+.total { margin-top: 10px; padding-top: 10px; border-top: 2px solid var(--ink); font-weight: 600; font-variant-numeric: tabular-nums; }
+.note { font-size: .78rem; color: var(--muted); margin-top: 8px; }
+footer { color: var(--muted); font-size: .74rem; padding: 24px 0 8px; text-align: center; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <header>
+    <h1>Dining <span>Now</span></h1>
+    <div class="sub" id="updated">Loading…</div>
+  </header>
 
+  <section id="v-now" class="on"><div id="now-body"><p class="empty">Loading…</p></div></section>
+
+  <section id="v-venue">
+    <label class="f">Venue</label>
+    <select id="venue-sel"></select>
+    <div class="chips" id="venue-days"></div>
+    <div id="venue-body"></div>
+  </section>
+
+  <section id="v-find">
+    <h2>Find food</h2>
+    <input type="text" id="find-q" placeholder="smoothie, ramen, bagel…" enterkeyhint="search">
+    <div id="find-body"></div>
+  </section>
+
+  <section id="v-build">
+    <h2>Build a meal</h2>
+    <div class="grid2">
+      <div><label class="f">Venue</label><select id="b-venue"></select></div>
+      <div><label class="f">Day</label><select id="b-day"></select></div>
+      <div><label class="f">Max calories</label><input type="number" id="b-kcal" placeholder="e.g. 600" inputmode="numeric"></div>
+      <div><label class="f">Min protein (g)</label><input type="number" id="b-prot" placeholder="e.g. 30" inputmode="numeric"></div>
+      <div><label class="f">Goal</label>
+        <select id="b-opt"><option value="protein">Most protein</option><option value="bal">Balanced</option><option value="low">Fewest calories</option></select></div>
+      <div><label class="f">Max items</label>
+        <select id="b-max"><option>2</option><option>3</option><option selected>4</option><option>5</option></select></div>
+    </div>
+    <label class="f">Avoid</label>
+    <div class="chips" id="b-allg"></div>
+    <label class="f">Pick from</label>
+    <div class="chips" id="b-cats"></div>
+    <button class="btn" id="b-go">Build my meal</button>
+    <div id="build-body"></div>
+  </section>
+
+  <footer>Unofficial student project. Not affiliated with ISU Dining.<br>Data from ISU Dining, refreshed every 2 hours. Always confirm allergens with staff.</footer>
+</div>
+
+<nav><div class="wrap">
+  <button data-v="now" class="on"><span class="ic">🕒</span>Now</button>
+  <button data-v="venue"><span class="ic">🍽️</span>Venues</button>
+  <button data-v="find"><span class="ic">🔎</span>Find</button>
+  <button data-v="build"><span class="ic">🥗</span>Build</button>
+</div></nav>
+
+<script>
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? '').replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+let META = null;
+const MENUS = {};
+const DAYS = 7;
+
+// ---------- time (Ames) ----------
+function ames() {
+  const p = new Intl.DateTimeFormat('en-CA', {timeZone: 'America/Chicago', year: 'numeric', month: '2-digit',
+    day: '2-digit', hour: '2-digit', minute: '2-digit', hourCycle: 'h23'}).formatToParts(new Date());
+  const g = t => p.find(x => x.type === t).value;
+  return {date: `${g('year')}-${g('month')}-${g('day')}`, mins: (+g('hour')) * 60 + (+g('minute'))};
+}
+const addDays = (s, n) => { const d = new Date(s + 'T12:00:00Z'); d.setUTCDate(d.getUTCDate() + n); return d.toISOString().slice(0, 10); };
+const toMin = hm => { const [h, m] = hm.split(':').map(Number); return h * 60 + m; };
+const fmt = hm => { let [h, m] = hm.split(':').map(Number); const ap = h >= 12 ? 'PM' : 'AM'; h = h % 12 || 12; return `${h}:${String(m).padStart(2, '0')} ${ap}`; };
+function dayLabel(d) {
+  const t = ames().date;
+  if (d === t) return 'Today';
+  if (d === addDays(t, 1)) return 'Tomorrow';
+  return new Date(d + 'T12:00:00Z').toLocaleDateString('en-US', {weekday: 'short', month: 'short', day: 'numeric', timeZone: 'UTC'});
+}
+const vname = id => META.venues[id] || id;
+const windows = (date, vid) => (META.hours[date] || {})[vid] || [];
+const hoursText = (date, vid) => {
+  const w = windows(date, vid);
+  if (!w.length) return 'Closed';
+  return w.map(x => x.all_day ? 'Open all day' : `${fmt(x.s)}–${fmt(x.e)}${x.note ? ` (${x.note})` : ''}`).join(', ');
+};
+
+async function menu(date) {
+  if (!(date in MENUS)) {
+    try { const r = await fetch(`data/menu-${date}.json`); MENUS[date] = r.ok ? (await r.json()).items : []; }
+    catch { MENUS[date] = []; }
+  }
+  return MENUS[date];
+}
+
+// ---------- Now ----------
+function renderNow() {
+  const {date, mins} = ames();
+  const open = [], later = [];
+  for (const vid of Object.keys(META.venues)) {
+    for (const w of windows(date, vid)) {
+      if (w.all_day) { open.push({vid, end: null}); break; }
+      const s = toMin(w.s), e = toMin(w.e);
+      if (s <= mins && mins <= e) { open.push({vid, end: w.e, left: e - mins}); break; }
+      if (s > mins) { later.push({vid, start: w.s}); break; }
+    }
+  }
+  open.sort((a, b) => (a.left ?? 9999) - (b.left ?? 9999));
+  later.sort((a, b) => toMin(a.start) - toMin(b.start));
+  let h = `<h2>Open now · ${open.length}</h2>`;
+  h += open.length ? open.map(o => `<div class="card row"><span class="vname link" data-go="${o.vid}">${esc(vname(o.vid))}</span>
+      <span>${o.end ? (o.left <= 45 ? `<span class="badge b-soon">closes in ${o.left} min</span>` : `<span class="dim">till ${fmt(o.end)}</span>`) : '<span class="badge b-open">all day</span>'}</span></div>`).join('')
+    : `<p class="empty">Nothing open right now.</p>`;
+  if (later.length) h += `<h2>Opening later today</h2>` + later.map(o => `<div class="card row"><span class="vname link" data-go="${o.vid}">${esc(vname(o.vid))}</span><span class="dim">${fmt(o.start)}</span></div>`).join('');
+  if (!open.length && !later.length) {
+    const t = addDays(date, 1);
+    const tm = Object.keys(META.venues).filter(v => windows(t, v).length);
+    if (tm.length) h += `<h2>Tomorrow</h2>` + tm.map(v => `<div class="card row"><span class="vname link" data-go="${v}">${esc(vname(v))}</span><span class="dim">${esc(hoursText(t, v))}</span></div>`).join('');
+  }
+  $('#now-body').innerHTML = h;
+}
+
+// ---------- Venues ----------
+let vDay = null;
+function itemRow(it) {
+  const nums = [it.k != null ? `${Math.round(it.k)} kcal` : null, it.p != null ? `${it.p}g protein` : null].filter(Boolean).join(' · ');
+  return `<div class="item"><div>${esc(it.n)}</div><div class="nums">${nums || 'no nutrition info'}</div>${it.a ? `<div class="allg">Contains: ${esc(it.a)}</div>` : ''}</div>`;
+}
+async function renderVenue() {
+  const vid = $('#venue-sel').value, t = ames().date;
+  vDay = vDay || t;
+  $('#venue-days').innerHTML = [...Array(DAYS).keys()].map(i => addDays(t, i))
+    .map(d => `<span class="chip ${d === vDay ? 'on' : ''}" data-day="${d}">${dayLabel(d)}</span>`).join('');
+  const hrs = hoursText(vDay, vid);
+  let h = `<div class="card"><div class="row"><span class="vname">${esc(vname(vid))}</span></div><div class="dim">${esc(hrs)}</div></div>`;
+  if (hrs !== 'Closed') {
+    const items = (await menu(vDay)).filter(i => String(i.v) === vid);
+    if (!items.length) h += `<p class="empty">Menu not posted yet.</p>`;
+    else {
+      const cats = {};
+      items.forEach(i => (cats[i.c] = cats[i.c] || []).push(i));
+      h += `<div class="card">` + Object.entries(cats).map(([c, list]) =>
+        `<details><summary><span>${esc(c)}</span><span class="dim">${list.length}</span></summary>${list.map(itemRow).join('')}</details>`).join('') + `</div>`;
+    }
+  }
+  $('#venue-body').innerHTML = h;
+}
+function goVenue(vid) { $('#venue-sel').value = vid; vDay = ames().date; show('venue'); renderVenue(); }
+
+// ---------- Find ----------
+const STOP = new Set(['the','and','with','where','can','get','want','some','any','for','food','today','tomorrow']);
+async function find() {
+  const q = $('#find-q').value.toLowerCase();
+  const toks = q.match(/[a-z]+/g)?.filter(t => t.length > 2 && !STOP.has(t)) || [];
+  if (!toks.length) { $('#find-body').innerHTML = ''; return; }
+  $('#find-body').innerHTML = '<p class="empty">Searching 7 days…</p>';
+  const t = ames().date, dates = [...Array(DAYS).keys()].map(i => addDays(t, i));
+  const all = await Promise.all(dates.map(menu));
+  const byVenue = {};
+  dates.forEach((d, i) => {
+    for (const it of all[i]) {
+      const hay = `${it.n} ${it.c}`.toLowerCase();
+      if (!toks.every(tok => hay.includes(tok))) continue;
+      const b = byVenue[it.v] = byVenue[it.v] || {date: d, items: []};
+      if (b.date === d && !b.items.some(x => x.n === it.n)) b.items.push(it);
+    }
+  });
+  const res = Object.entries(byVenue).sort((a, b) => a[1].date.localeCompare(b[1].date));
+  $('#find-body').innerHTML = res.length ? res.map(([vid, b]) => `<div class="card">
+      <div class="row"><span class="vname link" data-go="${vid}">${esc(vname(vid))}</span><span class="badge ${b.date === t ? 'b-open' : 'b-soon'}">${dayLabel(b.date)}</span></div>
+      <div class="dim">${esc(hoursText(b.date, vid))}</div>${b.items.slice(0, 6).map(itemRow).join('')}</div>`).join('')
+    : `<p class="empty">Not on any menu in the next 7 days.</p>`;
+}
+
+// ---------- Build ----------
+const ALLG = {Dairy: ['milk'], Gluten: ['wheat'], Egg: ['egg'], Soy: ['soy'], Peanut: ['peanut'],
+  'Tree nuts': ['tree nut', 'almond', 'cashew', 'pecan', 'walnut', 'hazelnut', 'pistachio'],
+  Fish: ['fish'], Shellfish: ['shellfish', 'shrimp', 'crab', 'lobster'], Sesame: ['sesame']};
+function allergenStatus(it, avoid) {
+  if (!avoid.length) return 'ok';
+  const text = `${it.a || ''} ${it.ing || ''}`.toLowerCase();
+  if (!text.trim()) return 'unknown';
+  return avoid.some(a => ALLG[a].some(term => text.includes(term))) ? 'contains' : 'ok';
+}
+function plan(items, o) {
+  let pool = [], exC = 0, exU = 0;
+  for (const it of items) {
+    if (it.k == null || !o.cats.includes(it.c)) continue;
+    const s = allergenStatus(it, o.avoid);
+    if (s === 'unknown') exU++; else if (s === 'contains') exC++; else pool.push(it);
+  }
+  const K = c => c.reduce((s, i) => s + (i.k || 0), 0), P = c => c.reduce((s, i) => s + (i.p || 0), 0);
+  const score = c => o.opt === 'low' ? -K(c) + 0.5 * P(c) : o.opt === 'bal' ? P(c) - 0.03 * K(c) : P(c) - 0.001 * K(c);
+  const groups = {};
+  pool.forEach(i => (groups[i.c] = groups[i.c] || []).push(i));
+  const cap = o.maxK || Infinity;
+  let beam = [[]];
+  for (const g of Object.values(groups)) {
+    const top = g.sort((a, b) => score([b]) - score([a])).slice(0, 6), next = [...beam];
+    for (const c of beam) if (c.length < o.maxItems) for (const it of top) { const n = [...c, it]; if (K(n) <= cap) next.push(n); }
+    beam = next.sort((a, b) => score(b) - score(a)).slice(0, 300);
+  }
+  const minItems = Math.min(2, o.maxItems);
+  const ok = c => c.length >= minItems && (o.minP == null || P(c) >= o.minP);
+  const feas = beam.filter(ok), rest = beam.filter(c => c.length);
+  const best = (feas.length ? feas : rest).sort((a, b) => score(b) - score(a))[0] || [];
+  return {best, met: feas.length > 0, k: K(best), p: P(best),
+    f: best.some(i => i.f != null) ? best.reduce((s, i) => s + (i.f || 0), 0) : null, exC, exU};
+}
+async function loadBuildCats() {
+  const items = (await menu($('#b-day').value)).filter(i => String(i.v) === $('#b-venue').value);
+  const cats = [...new Set(items.map(i => i.c))];
+  $('#b-cats').innerHTML = cats.length ? cats.map(c => `<span class="chip on" data-cat="${esc(c)}">${esc(c)}</span>`).join('')
+    : '<span class="dim">No menu for this day.</span>';
+}
+function fillBuildVenues() {
+  const d = $('#b-day').value, cur = $('#b-venue').value;
+  const ids = Object.keys(META.venues).filter(v => windows(d, v).length).sort((a, b) => vname(a).localeCompare(vname(b)));
+  $('#b-venue').innerHTML = ids.map(v => `<option value="${v}">${esc(vname(v))}</option>`).join('');
+  if (ids.includes(cur)) $('#b-venue').value = cur;
+  loadBuildCats();
+}
+async function build() {
+  const d = $('#b-day').value, vid = $('#b-venue').value;
+  const items = (await menu(d)).filter(i => String(i.v) === vid);
+  const num = id => { const v = parseFloat($(id).value); return isNaN(v) ? null : v; };
+  const r = plan(items, {
+    maxK: num('#b-kcal'), minP: num('#b-prot'), opt: $('#b-opt').value, maxItems: +$('#b-max').value,
+    avoid: [...document.querySelectorAll('#b-allg .chip.on')].map(c => c.dataset.a),
+    cats: [...document.querySelectorAll('#b-cats .chip.on')].map(c => c.dataset.cat),
+  });
+  if (!r.best.length) { $('#build-body').innerHTML = `<p class="empty">Nothing fits those filters. Loosen calories or pick more categories.</p>`; return; }
+  $('#build-body').innerHTML = `<div class="card" style="margin-top:14px">
+    <div class="row"><span class="vname">${esc(vname(vid))}</span><span class="badge ${r.met ? 'b-open' : 'b-soon'}">${r.met ? 'goals met' : 'closest possible'}</span></div>
+    <div class="dim">${dayLabel(d)} · ${esc(hoursText(d, vid))}</div>
+    ${r.best.map(it => `<div class="item"><div>${esc(it.n)} <span class="dim">· ${esc(it.c)}</span></div><div class="nums">${Math.round(it.k)} kcal · ${it.p ?? '?'}g protein</div>${it.a ? `<div class="allg">Contains: ${esc(it.a)}</div>` : ''}</div>`).join('')}
+    <div class="total row"><span>Total</span><span>${Math.round(r.k)} kcal · ${Math.round(r.p)}g protein${r.f != null ? ` · ${Math.round(r.f)}g fat` : ''}</span></div>
+    ${r.exC || r.exU ? `<div class="note">Removed ${r.exC} items with your allergens${r.exU ? ` and ${r.exU} with no allergen info listed` : ''}.</div>` : ''}
+  </div>`;
+}
+
+// ---------- wiring ----------
+function show(v) {
+  document.querySelectorAll('section').forEach(s => s.classList.toggle('on', s.id === 'v-' + v));
+  document.querySelectorAll('nav button').forEach(b => b.classList.toggle('on', b.dataset.v === v));
+  window.scrollTo(0, 0);
+}
+document.addEventListener('click', e => {
+  const go = e.target.closest('[data-go]'); if (go) return goVenue(go.dataset.go);
+  const nb = e.target.closest('nav button'); if (nb) { show(nb.dataset.v); if (nb.dataset.v === 'venue') renderVenue(); return; }
+  const dc = e.target.closest('#venue-days .chip'); if (dc) { vDay = dc.dataset.day; return renderVenue(); }
+  const ch = e.target.closest('#b-allg .chip, #b-cats .chip'); if (ch) ch.classList.toggle('on');
+});
+let findTimer;
+$('#find-q').addEventListener('input', () => { clearTimeout(findTimer); findTimer = setTimeout(find, 300); });
+$('#venue-sel').addEventListener('change', renderVenue);
+$('#b-day').addEventListener('change', fillBuildVenues);
+$('#b-venue').addEventListener('change', loadBuildCats);
+$('#b-go').addEventListener('click', build);
+
+(async () => {
+  try { META = await (await fetch('data/meta.json', {cache: 'no-cache'})).json(); }
+  catch { $('#updated').textContent = 'Could not load data. Try again later.'; return; }
+  $('#updated').textContent = `Unofficial · updated ${META.generated_at}`;
+  const ids = Object.keys(META.venues).sort((a, b) => vname(a).localeCompare(vname(b)));
+  $('#venue-sel').innerHTML = ids.map(v => `<option value="${v}">${esc(vname(v))}</option>`).join('');
+  const t = ames().date;
+  $('#b-day').innerHTML = [0, 1].map(i => addDays(t, i)).map(d => `<option value="${d}">${dayLabel(d)}</option>`).join('');
+  $('#b-allg').innerHTML = Object.keys(ALLG).map(a => `<span class="chip" data-a="${a}">${a}</span>`).join('');
+  fillBuildVenues();
+  renderNow();
+  setInterval(renderNow, 60000);
+})();
+</script>
+</body>
+</html>
