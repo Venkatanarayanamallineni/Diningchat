@@ -211,12 +211,38 @@ const STOP = new Set(('a an the i im me my we you your to of in on at for and or
   'about with without no free avoid allergic allergy under below over less more than least max min most high low calorie calories ' +
   'cal cals kcal protein grams gram meal meals build make plan bowl combo healthy healthiest light lightest good best options option ' +
   'available still also else going lets let up dining hall halls vegetarian vegan veggie meatless day week this next same but ' +
-  'hungry craving crave place much many lot')
+  'hungry craving crave place much many lot looking look gonna going trying try thinking think recommend suggest ' +
+  'suggestion ideas idea maybe kinda really just good great nice whats\'s anywhere somewhere eat ate grab grabbing go there\'s')
   .split(' '));
 
+let VOCAB = new Set(), KEYWORDS = [];
+function buildVocab() {
+  VOCAB = new Set(META.words || []);
+  KEYWORDS = ['tomorrow', 'today', 'tonight', 'breakfast', 'lunch', 'dinner', 'brunch', ...WEEKDAYS, 'protein', 'calories',
+    'calorie', 'vegetarian', 'vegan', 'open', 'closed', 'hours', 'dairy', 'gluten', 'healthy', 'build', 'bowl',
+    ...new Set(ALIAS_LIST.flatMap(([a]) => a.split(' ')).filter(w => w.length > 3))];
+}
+function lev(a, b) {
+  if (Math.abs(a.length - b.length) > 2) return 9;
+  let prev = [...Array(b.length + 1).keys()];
+  for (let i = 1; i <= a.length; i++) {
+    const cur = [i];
+    for (let j = 1; j <= b.length; j++) cur[j] = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + (a[i - 1] === b[j - 1] ? 0 : 1));
+    prev = cur;
+  }
+  return prev[b.length];
+}
+function fixWord(w) {
+  if (w.length < 4 || /\d/.test(w) || STOP.has(w) || VOCAB.has(w) || KEYWORDS.includes(w)) return w;
+  const x = w.replace(/(.)\1{2,}/g, '$1$1');  // tommorrrow -> tommorrow
+  const near = (list, max) => { let best = null, d = max + 1; for (const k of list) { const e = lev(x, k); if (e < d) { d = e; best = k; } } return best; };
+  return near(KEYWORDS, x.length >= 6 ? 2 : 1) || (x.length >= 5 ? near(VOCAB, x.length >= 8 ? 2 : 1) : null) || x;
+}
+
 function parse(text) {
-  const t = ' ' + norm(text) + ' ';
-  const q = {raw: text, t};
+  const fixed = norm(text).split(' ').map(fixWord).join(' ');
+  const t = ' ' + fixed + ' ';
+  const q = {raw: text, t, corrected: fixed !== norm(text) ? fixed : null};
   for (const [alias, id] of ALIAS_LIST) if (t.includes(` ${alias} `)) { q.venue = String(id); q.venueWords = alias.split(' '); break; }
 
   const today = ames().date;
@@ -256,6 +282,8 @@ function parse(text) {
   const allergenWords = Object.values(ALLERGEN_WORDS).flat();
   q.food = t.trim().split(' ').filter(w => w.length > 2 && !STOP.has(w) && !skip.has(w) && !/^\d/.test(w) &&
     !WEEKDAYS.includes(w) && !(w in MEALS) && !allergenWords.includes(w));
+  q.unknown = q.food.filter(w => VOCAB.size && !VOCAB.has(w) && !VOCAB.has(w.replace(/e?s$/, '')));
+  if (VOCAB.size) q.food = q.food.filter(w => !q.unknown.includes(w));
   return q;
 }
 
@@ -467,10 +495,13 @@ async function answerPlan(q) {
 
 function answerMealTime(q) {
   const [a, b] = MEALS[q.meal], day = q.day;
-  const ids = VIDS().filter(v => windows(day, v).some(w => w.all_day || (toMin(w.s) < b && toMin(w.e) > a)));
+  const fits = w => w.all_day || (toMin(w.s) < b && toMin(w.e) > a);
+  const ids = VIDS().filter(v => windows(day, v).some(fits))
+    .sort((x, y) => toMin(windows(day, x).find(fits).s || '00:00') - toMin(windows(day, y).find(fits).s || '00:00'));
   if (!ids.length) return {say: `No ${q.meal} spots found ${dayLabel(day)}.`};
-  return {say: `${cap(q.meal)} ${dayLabel(day)}: <b>${ids.length} places</b>.`,
-    html: rowCard(ids.map(v => `<div class="row">${vlink(v)}<span class="dim">${esc(hoursText(day, v))}</span></div>`)),
+  const span = v => windows(day, v).filter(fits).map(w => w.all_day ? 'all day' : `${fmt(w.s)}–${fmt(w.e)}`).join(', ');
+  return {say: `${cap(q.meal)} ${dayLabel(day)}: <b>${ids.length} places</b>. Earliest is <b>${esc(vname(ids[0]))}</b>.`,
+    html: rowCard(ids.map(v => `<div class="row">${vlink(v)}<span class="dim">${span(v)}</span></div>`)),
     chips: [`High protein ${q.meal} ${q.dayExplicit ? dayLabel(day) : ''}`.trim(), 'What’s open now?']};
 }
 
@@ -496,6 +527,12 @@ async function respond(text) {
     else if (!q.venue && last.venue && / (it|there|that place|they|them) /.test(q.t)) q.venue = last.venue;
   }
   last = q;
+  const a = await route(q);
+  if (q.corrected) a.say = `<span class="dim">Showing results for “${esc(q.corrected)}”</span><br>` + (a.say || '');
+  return a;
+}
+
+async function route(q) {
   if (q.wantPlan && !(q.wantHours && !q.maxK && !q.minP)) return answerPlan(q);
   if (q.wantHours && q.venue) return answerVenueHours(q);
   if (q.wantHours) {
@@ -509,6 +546,7 @@ async function respond(text) {
   if (q.venue) return answerVenueMenu(q);
   if (q.food.length) return answerFind(q);
   if (q.meal) return answerMealTime(q);
+  if (q.unknown.length) return {say: `Couldn’t find “${esc(q.unknown.join(' '))}” on any menu this week.`, chips: HELP.chips};
   return {say: 'Not sure what you mean. Try one of these:', chips: HELP.chips};
 }
 
@@ -573,6 +611,7 @@ $('#venue-sel').addEventListener('change', renderVenue);
   try { META = await (await fetch('data/meta.json', {cache: 'no-cache'})).json(); }
   catch { $('#updated').textContent = 'Could not load data. Try again later.'; return; }
   buildAliases();
+  buildVocab();
   $('#updated').textContent = `Unofficial · updated ${META.generated_at}`;
   $('#venue-sel').innerHTML = VIDS().sort((a, b) => vname(a).localeCompare(vname(b))).map(v => `<option value="${v}">${esc(vname(v))}</option>`).join('');
   const open = VIDS().filter(v => statusNow(v).state === 'open');
