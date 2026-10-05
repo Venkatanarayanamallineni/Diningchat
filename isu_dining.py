@@ -109,8 +109,9 @@ def get_menu(venue_id: int, day: date) -> list:
     """Flat list of menu items for one venue and day, section headers removed."""
     res = session.get(f"{BASE_URL}/venue/{venue_id}/menu/{day.isoformat()}", timeout=TIMEOUT)
     res.raise_for_status()
-    items, seen = [], set()
-    for meal in (res.json().get("meals") or {}).values():
+    items, seen = [], {}
+    for meal_key, meal in (res.json().get("meals") or {}).items():
+        meal_name = str(meal.get("name") or meal_key).strip()
         for display in (meal.get("menu_displays") or {}).values():
             for group_name, group in (display.get("categories") or {}).items():
                 for item in ((group or {}).get("items") or {}).values():
@@ -119,17 +120,21 @@ def get_menu(venue_id: int, day: date) -> list:
                         continue
                     category = (item.get("category_display_name") or group_name or "Other").strip()
                     if (name, category) in seen:
+                        meals = seen[(name, category)]["m"]
+                        if meal_name not in meals:
+                            meals.append(meal_name)
                         continue
-                    seen.add((name, category))
                     nut = _nutrients(item)
                     ingredients = item.get("ingredients")
-                    items.append({
-                        "v": venue_id, "n": name, "c": category,
+                    entry = {
+                        "v": venue_id, "n": name, "c": category, "m": [meal_name],
                         "k": _pick(nut, ("kcal", "calories"), "calor"),
                         "p": _pick(nut, ("protein",)),
                         "f": _pick(nut, ("fat", "total fat")),
                         "cb": _pick(nut, ("carbs", "carbohydrate", "total carbohydrate"), "carb"),
                         "a": _allergens(ingredients),
                         "ing": ingredients,
-                    })
+                    }
+                    seen[(name, category)] = entry
+                    items.append(entry)
     return items
