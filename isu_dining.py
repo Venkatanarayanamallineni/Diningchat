@@ -105,6 +105,57 @@ def _allergens(ingredients):
     return rest.split(".")[0].strip() or None
 
 
+# Allergen tags are worked out here once, so the site never downloads
+# the long ingredient text. Broad on purpose: a false "contains" is safer
+# than a missed allergen.
+ALLERGEN_TERMS = {
+    "dairy": ["milk", "whey", "casein", "butter", "cream", "cheese", "yogurt"],
+    "gluten": ["wheat", "barley", "rye", "gluten"],
+    "egg": ["egg"],
+    "soy": ["soy"],
+    "peanut": ["peanut"],
+    "treenut": ["tree nut", "almond", "cashew", "pecan", "walnut", "hazelnut", "pistachio", "macadamia"],
+    "fish": ["fish", "salmon", "tuna", "cod", "tilapia", "pollock", "anchov"],
+    "shellfish": ["shellfish", "shrimp", "crab", "lobster", "clam", "scallop", "oyster"],
+    "sesame": ["sesame", "tahini"],
+}
+MEAT = ["chicken", "beef", "pork", "bacon", "sausage", "turkey", "ham", "pepperoni", "steak", "fish", "tuna",
+        "salmon", "shrimp", "meat", "brisket", "gyro", "chorizo", "salami", "anchov", "gelatin", "meatball",
+        "cod", "tilapia", "pollock", "crab", "lobster"]
+
+
+def _allergen_tags(allergens, ingredients):
+    text = f"{allergens or ''} {ingredients or ''}".lower().replace("gluten free", "").replace("gluten-free", "")
+    return [tag for tag, terms in ALLERGEN_TERMS.items() if any(t in text for t in terms)]
+
+
+def _diet_tags(item):
+    """ISU marks some items with diet icons. The field name isn't documented,
+    so look through the item's extra fields for the labels themselves."""
+    found = set()
+
+    def walk(x):
+        if isinstance(x, dict):
+            for k, v in x.items():
+                if k not in ("nutrients", "ingredients", "name"):
+                    walk(k)
+                    walk(v)
+        elif isinstance(x, list):
+            for v in x:
+                walk(v)
+        elif isinstance(x, str):
+            s = x.lower()
+            if "vegan" in s:
+                found.add("vegan")
+            if "vegetarian" in s:
+                found.add("vegetarian")
+            if "halal" in s:
+                found.add("halal")
+
+    walk(item)
+    return sorted(found)
+
+
 def get_menu(venue_id: int, day: date) -> list:
     """Flat list of menu items for one venue and day, section headers removed."""
     res = session.get(f"{BASE_URL}/venue/{venue_id}/menu/{day.isoformat()}", timeout=TIMEOUT)
@@ -126,15 +177,26 @@ def get_menu(venue_id: int, day: date) -> list:
                         continue
                     nut = _nutrients(item)
                     ingredients = item.get("ingredients")
+                    allergens = _allergens(ingredients)
                     entry = {
                         "v": venue_id, "n": name, "c": category, "m": [meal_name],
                         "k": _pick(nut, ("kcal", "calories"), "calor"),
                         "p": _pick(nut, ("protein",)),
                         "f": _pick(nut, ("fat", "total fat")),
                         "cb": _pick(nut, ("carbs", "carbohydrate", "total carbohydrate"), "carb"),
-                        "a": _allergens(ingredients),
-                        "ing": ingredients,
+                        "a": allergens,
                     }
+                    tags = _allergen_tags(allergens, ingredients)
+                    if tags:
+                        entry["t"] = tags
+                    if not allergens and not ingredients:
+                        entry["u"] = 1  # no allergen info at all
+                    if any(w in f"{name} {ingredients or ''}".lower() for w in MEAT):
+                        entry["mt"] = 1
+                    diet = _diet_tags(item)
+                    if diet:
+                        entry["d"] = diet
+                    entry = {k: v for k, v in entry.items() if v is not None}  # smaller files
                     seen[(name, category)] = entry
                     items.append(entry)
     return items

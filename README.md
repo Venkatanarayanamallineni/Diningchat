@@ -2,7 +2,7 @@
 
 Unofficial ISU dining guide. Free, no login, works on any phone.
 
-**Live:**  https://venkatanarayanamallineni.github.io/Diningchat/
+**Live:** https://YOUR-USERNAME.github.io/dining-now/
 
 ## Features
 
@@ -10,6 +10,13 @@ Unofficial ISU dining guide. Free, no login, works on any phone.
 - Hours and full menus for every dining location, 7 days ahead
 - Search a food and see where and which day it's served
 - Build a meal: set calories, protein, and allergens to avoid. Totals come from ISU's nutrition data
+
+## Use it
+
+- **Phone:** open the link, then Share > Add to Home Screen (iPhone) or menu > Install app (Android). Works offline with the last saved data.
+- **Laptop:** open the link, or click the install icon in the address bar.
+- **Browser extension:** load the `extension/` folder (see below).
+- **Share an answer:** links like `?q=high protein dinner` open straight to that answer.
 
 ## How it works
 
@@ -25,6 +32,16 @@ python -m http.server 8000
 ```
 
 Open http://localhost:8000
+
+## Browser extension
+
+`extension/` is a small popup that shows the site. Change the link in `popup.html` to your Pages URL.
+- Try it: `chrome://extensions` > Developer mode > Load unpacked > pick `extension/`
+- Publish: Edge Add-ons and Firefox Add-ons are free. Chrome Web Store has a one-time $5 fee.
+
+## Feedback button
+
+Make a Google Form with one paragraph question. Get a prefilled link with the word `QUESTION` in that field and paste it into `FEEDBACK_FORM` at the top of the script in `docs/index.html`.
 
 ## Disclaimer
 
