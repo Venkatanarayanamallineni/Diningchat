@@ -7,6 +7,7 @@ GitHub Actions runs this every 2 hours, so the site never calls ISU directly.
 
 import json
 import os
+import re
 from datetime import timedelta
 
 import requests
@@ -68,10 +69,20 @@ def main():
         if name.startswith("menu-") and name[5:15] < today.isoformat():
             os.remove(os.path.join(OUT, name))
 
+    # Every word that shows up on a menu this week. The site uses it to tell
+    # food words apart from normal words and to fix typos.
+    words = set()
+    for i in range(MENU_DAYS):
+        key = (today + timedelta(days=i)).isoformat()
+        for it in read_json(os.path.join(OUT, f"menu-{key}.json"), {}).get("items", []):
+            text = re.sub(r"[^a-z0-9 ]", " ", f"{it['n']} {it['c']}".lower().replace("'", ""))
+            words.update(w for w in text.split() if len(w) > 2 and not w.isdigit())
+
     write_json(os.path.join(OUT, "meta.json"), {
         "generated_at": now_ames().strftime("%a %b %d, %I:%M %p"),
         "venues": {str(k): v for k, v in VENUES.items()},
         "hours": hours,
+        "words": sorted(words),
     })
 
 
