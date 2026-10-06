@@ -25,9 +25,9 @@ const VENUE_INFO = {
   49: {pay: 'retail', lat: 42.02509, lng: -93.64469},   // Business Cafe, Gerdin
   50: {pay: 'retail', lat: 42.02991, lng: -93.64561},   // Courtyard Cafe, Lagomarcino
   51: {pay: 'retail', lat: 42.02844, lng: -93.65317},   // Design Cafe
-  52: {pay: 'retail'},                                  // Gentle Doctor Cafe, Vet Med (location not set)
-  10: {pay: 'retail'},                                  // Charging Station (location not set)
-  60: {lat: 42.01392, lng: -93.65078},                  // South Side Eats (payment not confirmed)
+  52: {pay: 'retail', lat: 42.01020, lng: -93.63150},   // Gentle Doctor Cafe, Vet Med, 1800 Christensen Dr
+  10: {pay: 'retail', lat: 42.02319, lng: -93.64560},   // Charging Station, inside MU Food Court
+  60: {pay: 'center', lat: 42.01392, lng: -93.65078},   // South Side Eats
 };
 const PAY_LABEL = {center: 'Dining center · meal swipe', getgo: 'GET & Go · swipe or Dining Dollars', retail: 'Dining Dollars or Flex Meal'};
 const payTag = vid => VENUE_INFO[vid]?.pay ? `<div class="pay">${PAY_LABEL[VENUE_INFO[vid].pay]}</div>` : '';
@@ -133,12 +133,10 @@ function buildAliases() {
 const ALLERGEN_WORDS = {Dairy: ['dairy', 'milk', 'lactose', 'cheese'], Gluten: ['gluten', 'wheat'], Egg: ['egg', 'eggs'], Soy: ['soy'],
   Peanut: ['peanut', 'peanuts', 'nut', 'nuts'], 'Tree nuts': ['nut', 'nuts', 'tree nut', 'tree nuts', 'almond', 'almonds'],
   Fish: ['fish'], Shellfish: ['shellfish', 'shrimp'], Sesame: ['sesame']};
-const ALLERGEN_TERMS = {Dairy: ['milk', 'whey', 'casein', 'butter', 'cream', 'cheese', 'yogurt', 'lactose', 'ghee'],
-  Gluten: ['wheat', 'barley', 'rye', 'semolina', 'durum', 'spelt', 'farro', 'couscous'], Egg: ['egg'], Soy: ['soy'], Peanut: ['peanut'],
-  'Tree nuts': ['tree nut', 'almond', 'cashew', 'pecan', 'walnut', 'hazelnut', 'pistachio'],
-  Fish: ['fish'], Shellfish: ['shellfish', 'shrimp', 'crab', 'lobster'], Sesame: ['sesame']};
-const MEAT = ['chicken', 'beef', 'pork', 'bacon', 'sausage', 'turkey', 'ham', 'pepperoni', 'steak', 'fish', 'tuna', 'salmon',
-  'shrimp', 'meat', 'brisket', 'gyro', 'chorizo', 'salami', 'anchov', 'gelatin', 'meatball', 'cod', 'tilapia'];
+// Allergen tags are worked out in isu_dining.py. This maps the labels people see to those tags.
+const TAG = {Dairy: 'dairy', Gluten: 'gluten', Egg: 'egg', Soy: 'soy', Peanut: 'peanut', 'Tree nuts': 'treenut',
+  Fish: 'fish', Shellfish: 'shellfish', Sesame: 'sesame'};
+const ALLERGENS = Object.keys(TAG);
 const WEEKDAYS = ['sunday', 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday'];
 const MEALS = {breakfast: [420, 630], brunch: [600, 780], lunch: [660, 840], dinner: [990, 1200]};
 const STOP = new Set(('a an the i im me my we you your to of in on at for and or is are was be it its there that this what whats ' +
@@ -255,20 +253,15 @@ function parse(text) {
 }
 
 // ---------- answering ----------
+// No allergen info at all counts as unsafe, never as safe.
 function allergenStatus(it, avoid) {
   if (!avoid.length) return 'ok';
-  if (slim(it)) return it.u ? 'unknown' : avoid.some(a => (it.t || []).includes(TAG[a])) ? 'contains' : 'ok';
-  const text = `${it.a || ''} ${it.ing || ''}`.toLowerCase();
-  if (!text.trim()) return 'unknown';
-  return avoid.some(a => ALLERGEN_TERMS[a].some(term => text.includes(term))) ? 'contains' : 'ok';
+  if (it.u || 'ing' in it) return 'unknown';  // 'ing' = file saved before tags existed, so don't trust it
+  return avoid.some(a => (it.t || []).includes(TAG[a])) ? 'contains' : 'ok';
 }
-const TAG = {Dairy: 'dairy', Gluten: 'gluten', Egg: 'egg', Soy: 'soy', Peanut: 'peanut', 'Tree nuts': 'treenut',
-  Fish: 'fish', Shellfish: 'shellfish', Sesame: 'sesame'};
-const slim = it => !('ing' in it);  // new data format: tags precomputed, no ingredient text
-const hasMeat = it => slim(it) ? !!it.mt : MEAT.some(w => `${it.n} ${it.ing || ''}`.toLowerCase().includes(w));
 function dietOk(it, o) {
   if (o.vegan && META.diet_labels) return !!(it.d && it.d.includes('vegan'));
-  if (o.noMeat) return META.diet_labels && it.d ? it.d.some(x => x === 'vegan' || x === 'vegetarian') : !hasMeat(it);
+  if (o.noMeat) return META.diet_labels && it.d ? it.d.some(x => x === 'vegan' || x === 'vegetarian') : !it.mt;
   return true;
 }
 const SIDE_CATS = /dessert|cookie|ice cream|condiment|beverage|drink|candy|snack|chips|soda|coffee|tea|shake/i;
@@ -412,6 +405,14 @@ async function answerVenueMenu(q) {
       if (!labeledMeals(items)) note = '<div class="note">Same menu all day here. Best guess for this meal.</div>';
       items = only;
     }
+  }
+  // "no dairy lunch at udm", "vegan at plato": hide what doesn't fit and say how many
+  if (q.avoid.length || q.noMeat) {
+    const fits = items.filter(i => dietOk(i, q) && allergenStatus(i, q.avoid) === 'ok');
+    const what = [q.vegan ? 'not vegan' : q.noMeat ? 'with meat' : '', q.avoid.length ? `with ${q.avoid.join(', ').toLowerCase()} or no allergen info` : ''].filter(Boolean).join(', ');
+    if (!fits.length) return {say: `Nothing at <b>${n}</b> ${when} fits that.`, chips: ['What’s open now?', `Build a meal at ${vname(v)}`]};
+    if (fits.length < items.length) note += `<div class="note">Hid ${items.length - fits.length} items ${what}. Confirm with staff.</div>`;
+    items = fits;
   }
   const chips = [...mealChips(day, v, q.meal).slice(0, 2), `Build a meal at ${vname(v)}`, `Is ${vname(v)} open now?`];
   const cats = {};
@@ -650,7 +651,7 @@ async function answerGroup(q, key, only) {
 }
 
 const HELP = {say: 'Ask me like you’d text a friend. I check every ISU dining spot at once.',
-  chips: ['What’s open now?', 'Closest open place', 'High protein lunch under 700 cal', 'Drinks', 'Where can I use a meal swipe?', 'Build a bowl at Plato, no dairy', 'Is UDM open?']};
+  chips: ['What’s open now?', 'Closest open place', 'High protein lunch under 700 cal', 'Indian food', 'Drinks', 'Where can I use a meal swipe?', 'Build a bowl at Plato, no dairy', 'Is UDM open?']};
 
 const FILLER = new Set(['what', 'about', 'how', 'and', 'then', 'for', 'on', 'the', 'whats', 'ok', 'so', 'or']);
 const DAY_WORDS = new Set(['today', 'tonight', 'tomorrow', 'now', ...WEEKDAYS]);
@@ -725,7 +726,7 @@ async function respond(text) {
   applyPrefs(q);
   const a = await route(q);
   if (q.corrected) a.say = `<span class="dim">Showing results for “${esc(q.corrected)}”</span><br>` + (a.say || '');
-  a.route = q.pay ? 'pay' : (q.near && !q.wantPlan) ? 'near' : (q.wantPlan || (q.noMeat && !q.food.length)) ? 'plan' : q.wantHours ? 'hours' : detectCuisine(q.t) ? 'cuisine' : detectGroup(q.t) ? 'group'
+  a.route = / (halal|kosher|zabiha) /.test(q.t) ? 'halal' : q.pay ? 'pay' : (q.near && !q.wantPlan) ? 'near' : (q.wantPlan || (q.noMeat && !q.food.length)) ? 'plan' : q.wantHours ? 'hours' : detectCuisine(q.t) ? 'cuisine' : detectGroup(q.t) ? 'group'
     : q.venue ? 'venue' : q.food.length ? 'find' : q.meal ? 'meal' : 'other';
   if (q.usedPrefs?.length && ['plan', 'group', 'find'].includes(a.route) && !a.needLocation)
     a.say = (a.say || '') + `<div class="note">Using your saved prefs: ${esc(q.usedPrefs.join(', '))}.</div>`;
@@ -733,6 +734,9 @@ async function respond(text) {
 }
 
 async function route(q) {
+  if (/ (halal|kosher|zabiha) /.test(q.t)) return {say: 'I can’t confirm halal or kosher from ISU’s data. Some labels in it are wrong '
+    + '(pork marked halal), so I won’t guess. Ask the staff or ISU Dining directly.',
+    html: '<div class="note">I can still show vegetarian or seafood options if that helps.</div>', chips: ['Vegetarian dinner', 'Where can I get fish?', 'What’s open now?']};
   if (q.pay) return answerPay(q);
   if (q.near && !q.wantPlan && !q.food.length && !detectGroup(q.t)) return answerOpenNow(q);
   if (q.wantPlan && !(q.wantHours && !q.maxK && !q.minP)) return answerPlan(q);
