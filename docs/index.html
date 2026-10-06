@@ -104,6 +104,8 @@ details { border-top: 1px solid var(--line); padding: 8px 0; }
 details:first-of-type { border-top: 0; }
 summary { cursor: pointer; font-weight: 600; list-style: none; display: flex; justify-content: space-between; }
 summary::-webkit-details-marker { display: none; }
+summary > span:first-child::before { content: '▸'; display: inline-block; width: 1.1em; color: var(--accent); transition: transform .15s; }
+details[open] > summary > span:first-child::before { transform: rotate(90deg); }
 .disclaimer { color: var(--muted); font-size: .7rem; text-align: center; padding: 18px 0 4px; }
 </style>
 </head>
@@ -240,7 +242,8 @@ function buildVocab() {
   VOCAB = new Set(META.words || []);
   KEYWORDS = ['tomorrow', 'today', 'tonight', 'breakfast', 'lunch', 'dinner', 'brunch', ...WEEKDAYS, 'protein', 'calories',
     'calorie', 'vegetarian', 'vegan', 'open', 'closed', 'hours', 'dairy', 'gluten', 'healthy', 'build', 'bowl',
-    ...new Set(ALIAS_LIST.flatMap(([a]) => a.split(' ')).filter(w => w.length > 3))];
+    ...new Set(ALIAS_LIST.flatMap(([a]) => a.split(' ')).filter(w => w.length > 3)),
+    ...Object.values(GROUPS).flatMap(g => [...g.words, ...g.subs.flatMap(sb => sb[2])]).filter(w => !w.includes(' '))];
 }
 function lev(a, b) {
   if (Math.abs(a.length - b.length) > 2) return 9;
@@ -463,11 +466,18 @@ async function answerFind(q) {
     if (Object.keys(byVenue).length) break;
   }
   const isOpen = v => statusNow(v).state === 'open';
-  const res = Object.entries(byVenue).sort((a, b) => a[1].date.localeCompare(b[1].date) || isOpen(b[0]) - isOpen(a[0]));
+  const res = Object.entries(byVenue).sort((a, b) => a[1].date.localeCompare(b[1].date) || isOpen(b[0]) - isOpen(a[0]) || b[1].items.length - a[1].items.length);
   const what = esc(q.food.join(' '));
   if (!res.length) return {say: `Couldn’t find “${what}” on any menu ${q.dayExplicit ? dayLabel(q.day) : 'in the next 7 days'}.`, chips: ['What’s open now?']};
   const [fv, fb] = res[0];
   const lead = fb.date === today ? `<b>${esc(vname(fv))}</b> has ${what} today.` : `Not on today’s menus. Next: <b>${esc(vname(fv))}</b> on <b>${dayLabel(fb.date)}</b>.`;
+  if (res.length > 3) {
+    return {say: `${cap(what)} is at <b>${res.length} places</b>. Tap one:`,
+      html: `<div class="card">${res.slice(0, 12).map(([v, b], i) => `<details${i === 0 ? ' open' : ''}><summary><span>${esc(vname(v))}</span>
+        <span class="dim">${b.date === today ? (statusNow(v).state === 'open' ? 'open now' : 'today') : cap(dayLabel(b.date)).split(',')[0]} · ${b.items.length}</span></summary>
+        <div class="dim">${esc(hoursText(b.date, v))}</div>${b.items.slice(0, 8).map(itemRow).join('')}</details>`).join('')}</div>`,
+      chips: [`High protein ${q.food.join(' ')}`, 'What’s open now?']};
+  }
   return {say: lead, html: res.slice(0, 5).map(([v, b]) => `<div class="card"><div class="row">${vlink(v)}<span class="badge ${b.date === today ? 'b-ok' : 'b-off'}">${cap(dayLabel(b.date))}</span></div>
       <div class="dim">${esc(hoursText(b.date, v))}</div>${b.items.slice(0, 4).map(itemRow).join('')}</div>`).join(''),
     chips: [`Is ${vname(fv)} open now?`, `What’s at ${vname(fv)}?`]};
@@ -535,8 +545,86 @@ function answerMealTime(q) {
     chips: [`High protein ${q.meal} ${q.dayExplicit ? dayLabel(day) : ''}`.trim(), 'What’s open now?']};
 }
 
+
+// Broad words get a grouped answer: [label, match regex, words that ask for just this type]
+const GROUPS = {
+  drinks: {label: 'drinks', words: ['drink', 'drinks', 'beverage', 'beverages', 'thirsty', 'refreshment'], subs: [
+    ['Smoothies', /smoothie/, ['smoothie', 'smoothies']],
+    ['Shakes', /shake|\bmalt\b/, ['shake', 'shakes', 'milkshake', 'milkshakes']],
+    ['Coffee', /coffee(?! cake)|latte|espresso|mocha|cappuccino|americano|cold brew|frapp|macchiato/, []],
+    ['Tea & chai', /\btea\b|chai|matcha/, ['tea', 'chai', 'matcha']],
+    ['Energy drinks', /energy|red bull|celsius|monster|rockstar|\bbang\b|ghost/, ['energy', 'energy drink', 'energy drinks', 'red bull', 'celsius', 'monster']],
+    ['Juice & lemonade', /juice|lemonade|refresher|agua fresca/, ['juice', 'lemonade', 'refresher']],
+    ['Soda & fountain', /fountain|soda|\bpop\b|coke|pepsi|sprite|dr pepper|mountain dew|root beer/, ['soda', 'pop', 'fountain', 'coke', 'pepsi', 'sprite']],
+    ['Hot chocolate & milk', /hot chocolate|cocoa|chocolate milk|\b(white|2%|skim|whole) milk\b/, ['hot chocolate', 'cocoa', 'chocolate milk']],
+    ['Water', /\bwater\b|sparkling|bubly|la ?croix/, ['water', 'sparkling water']]]},
+  coffee: {label: 'coffee', words: ['coffee', 'coffees', 'caffeine'], subs: [
+    ['Lattes', /latte/, ['latte', 'lattes']],
+    ['Mochas', /mocha/, ['mocha', 'mochas']],
+    ['Cold brew & iced', /cold brew|iced (coffee|latte|mocha)|nitro/, ['cold brew', 'iced coffee']],
+    ['Espresso drinks', /espresso|americano|cappuccino|macchiato|cortado/, ['espresso', 'americano', 'cappuccino']],
+    ['Frappes', /frapp/, ['frappe', 'frappuccino']],
+    ['Brewed coffee', /coffee(?! cake)/, []]]},
+  dessert: {label: 'desserts', nameOnly: true, words: ['dessert', 'desserts', 'sweet', 'sweets', 'treat', 'treats', 'sweet tooth'], subs: [
+    ['Cookies', /cookie/, ['cookie', 'cookies']],
+    ['Brownies & bars', /brownie|blondie|bars?$/, ['brownie', 'brownies']],
+    ['Cake & cupcakes', /\bcake|cupcake|cheesecake/, ['cake', 'cupcake', 'cupcakes'], /crab|fish|rice cake|potato/],
+    ['Ice cream', /ice cream|sundae|\bcone\b|gelato|frozen yogurt/, ['ice cream', 'sundae', 'gelato']],
+    ['Pie', /\bpie\b|cobbler|crisp\b/, ['pie'], /pot pie|shepherd|pizza/],
+    ['Pastries & donuts', /pastr|danish|croissant|donut|doughnut|scone|cinnamon roll/, ['pastry', 'pastries', 'donut', 'donuts']],
+    ['Pudding & parfait', /pudding|parfait|mousse/, ['pudding', 'parfait']]]},
+  snacks: {label: 'snacks', nameOnly: true, words: ['snack', 'snacks', 'munchies'], subs: [
+    ['Chips & pretzels', /chips|crisps|pretzel|popcorn|cheez|doritos|lays/, ['chips', 'pretzels', 'popcorn']],
+    ['Fruit', /^(fresh |whole |sliced )?(fruit|apple|banana|orange|grapes|berries|melon)|fruit cup|fruit salad/, ['fruit']],
+    ['Bars', /protein bar|granola|clif|kind bar/, ['protein bar', 'granola bar']],
+    ['Candy & chocolate', /candy|chocolate bar|gummy|skittles|m&m|reese|snickers/, ['candy']],
+    ['Yogurt', /yogurt|yoghurt/, ['yogurt']],
+    ['Nuts & trail mix', /\bnuts\b|trail mix|almonds|cashews|peanuts/, ['trail mix']]]},
+};
+function detectGroup(t) {
+  // specific types first ("energy drinks"), then broad words ("drinks")
+  for (const [key, g] of Object.entries(GROUPS))
+    for (const sub of g.subs) if (sub[2].some(w => t.includes(` ${w} `))) return {key, sub: sub[0]};
+  for (const [key, g] of Object.entries(GROUPS)) if (g.words.some(w => t.includes(` ${w} `))) return {key};
+  return null;
+}
+
+async function answerGroup(q, key, only) {
+  const G = GROUPS[key], today = ames().date;
+  const day = q.dayExplicit ? q.day : today;
+  const venues = q.venue ? [q.venue] : VIDS().filter(v => windows(day, v).length && (day !== today || statusNow(v).state !== 'closed'));
+  const items = (await menu(day)).filter(i => venues.includes(String(i.v)));
+  const subs = G.subs.filter(sb => !only || sb[0] === only).map(([label, re, words, not]) => ({label, re, words, not, byV: {}, n: 0}));
+  for (const it of items) {
+    const text = (G.nameOnly ? it.n : `${it.n} ${it.c}`).toLowerCase();
+    const sub = subs.find(sb => sb.re.test(text) && !(sb.not && sb.not.test(text)));
+    if (!sub || (q.avoid.length && allergenStatus(it, q.avoid) !== 'ok')) continue;
+    const list = sub.byV[it.v] = sub.byV[it.v] || [];
+    if (!list.some(x => x.n === it.n)) { list.push(it); sub.n++; }
+  }
+  const isOpen = v => day === today && statusNow(v).state === 'open';
+  const found = subs.filter(sb => sb.n).sort((a, b) => Object.keys(b.byV).length - Object.keys(a.byV).length);
+  const what = only ? only.toLowerCase() : G.label;
+  const where = q.venue ? ` at <b>${esc(vname(q.venue))}</b>` : '';
+  const when = day === today ? 'today' : dayLabel(day);
+  if (!found.length) return {say: `No ${what}${where} ${when}.`, chips: q.dayExplicit ? ['What’s open now?'] : [`${cap(what)} tomorrow`, 'What’s open now?']};
+
+  const block = sb => {
+    const vs = Object.keys(sb.byV).sort((a, b) => isOpen(b) - isOpen(a));
+    const body = q.venue ? sb.byV[q.venue].map(itemRow).join('')
+      : vs.slice(0, 8).map(v => `<div class="item"><div class="row">${vlink(v)}${day === today ? statusBadge(statusNow(v)) : ''}</div>
+          <div class="nums">${esc(sb.byV[v].slice(0, 3).map(i => i.n).join(', '))}${sb.byV[v].length > 3 ? ` +${sb.byV[v].length - 3} more` : ''}</div></div>`).join('')
+        + (vs.length > 8 ? `<div class="note">+${vs.length - 8} more places</div>` : '');
+    const count = q.venue ? `${sb.n} item${sb.n > 1 ? 's' : ''}` : `${vs.length} place${vs.length > 1 ? 's' : ''}${vs.some(isOpen) ? ` · ${vs.filter(isOpen).length} open` : ''}`;
+    return `<details${only ? ' open' : ''}><summary><span>${esc(sb.label)}</span><span class="dim">${count}</span></summary>${body}</details>`;
+  };
+  const say = only ? `${cap(what)}${where} ${when}:` : `${cap(what)}${where} ${when}: <b>${found.length} kinds</b>. Tap one to see ${q.venue ? 'items' : 'where'}.`;
+  const chips = only ? ['What’s open now?', `All ${G.label}`] : found.filter(sb => sb.words.length).slice(0, 4).map(sb => cap(sb.words[sb.words.length > 1 && sb.words[1].includes(' ') ? 1 : 0]));
+  return {say, html: `<div class="card">${found.map(block).join('')}</div>`, chips};
+}
+
 const HELP = {say: 'Ask me like you’d text a friend. I check every ISU dining spot at once.',
-  chips: ['What’s open now?', 'High protein lunch under 700 cal', 'Where can I get a smoothie?', 'Build a bowl at Plato, no dairy', 'Is UDM open?', 'Vegetarian dinner tonight']};
+  chips: ['What’s open now?', 'High protein lunch under 700 cal', 'Drinks', 'Build a bowl at Plato, no dairy', 'Is UDM open?', 'Vegetarian dinner tonight']};
 
 let last = null;
 const FILLER = new Set(['what', 'about', 'how', 'and', 'then', 'for', 'on', 'the', 'whats', 'ok', 'so', 'or']);
@@ -573,6 +661,8 @@ async function route(q) {
     return answerOpenNow(q);
   }
   if (q.noMeat && !q.food.length) return answerPlan({...q, wantPlan: true});
+  const grp = detectGroup(q.t.replace(/ all /, ' '));
+  if (grp) return answerGroup(q, grp.key, grp.sub);
   if (q.venue) return answerVenueMenu(q);
   if (q.food.length) return answerFind(q);
   if (q.meal) return answerMealTime(q);
