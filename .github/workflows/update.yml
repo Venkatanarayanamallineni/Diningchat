@@ -29,8 +29,15 @@ jobs:
         with:
           python-version: "3.12"
 
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "20"
+
       - name: Check answers (tests/run.js)
         run: node tests/run.js
+
+      - name: Lint Python
+        run: pip install ruff==0.16.10 && ruff check .
 
       - run: pip install -r requirements.txt
 
