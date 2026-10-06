@@ -8,13 +8,14 @@ GitHub Actions runs this every 2 hours, so the site never calls ISU directly.
 import json
 import os
 import re
+import sys
 import time
 from datetime import timedelta
 
 import requests
 
 import isu_dining
-from isu_dining import VENUES, get_hours, get_menu, now_ames
+from isu_dining import VENUES, ApiChanged, get_hours, get_menu, now_ames
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs", "data")
 MENU_DAYS = 7
@@ -39,14 +40,17 @@ def main():
     today = now_ames().date()
     old_meta = read_json(os.path.join(OUT, "meta.json"), {})
 
+    problems = []  # ISU changed its response shape. Old data is kept, then the run fails so GitHub emails you.
     hours = {}
     for i in range(MENU_DAYS + 1):
         day = today + timedelta(days=i)
         key = day.isoformat()
         try:
             hours[key] = {str(v): w for v, w in get_hours(day).items()}
-        except requests.RequestException as e:
-            print(f"hours {key}: failed ({e.__class__.__name__}), keeping last copy")
+        except (requests.RequestException, ApiChanged) as e:
+            print(f"hours {key}: failed ({e}), keeping last copy")
+            if isinstance(e, ApiChanged):
+                problems.append(str(e))
             if key in old_meta.get("hours", {}):
                 hours[key] = old_meta["hours"][key]
 
@@ -63,11 +67,18 @@ def main():
         for vid in map(int, hours.get(key, {})):
             try:
                 items += get_menu(vid, day)
-            except requests.RequestException:
+            except (requests.RequestException, ApiChanged) as e:
+                # future days are often just not posted yet, so only today counts as a real problem
+                if isinstance(e, ApiChanged) and i == 0:
+                    problems.append(str(e))
                 items += [x for x in old_items if x["v"] == vid]
         if items or not old_items:
             write_json(path, {"date": key, "fmt": FMT, "items": items})
             print(f"menu {key}: {len(items)} items")
+        if i == 0 and len(hours.get(key, {})) >= 5 and not items:
+            problems.append(f"menu {key}: {len(hours[key])} venues open but 0 items")
+        if i == 0 and items and not any(x.get("k") for x in items):
+            problems.append(f"menu {key}: no item has calories, nutrient names may have changed")
 
     for name in os.listdir(OUT):
         if name.startswith("menu-") and name[5:15] < today.isoformat():
@@ -89,14 +100,22 @@ def main():
     # If nearly everything says vegan, the label is page noise, not real data.
     diet_labels = 0 < tagged < 0.6 * max(total, 1)
 
-    write_json(os.path.join(OUT, "meta.json"), {
-        "generated_at": now_ames().strftime("%a %b %d, %I:%M %p"),
-        "venues": {str(k): v for k, v in VENUES.items()},
-        "hours": hours,
-        "words": sorted(words),
-        "ts": int(time.time()),
-        "diet_labels": diet_labels,
-    })
+    write_json(
+        os.path.join(OUT, "meta.json"),
+        {
+            "generated_at": now_ames().strftime("%a %b %d, %I:%M %p"),
+            "venues": {str(k): v for k, v in VENUES.items()},
+            "hours": hours,
+            "words": sorted(words),
+            "ts": int(time.time()),
+            "diet_labels": diet_labels,
+        },
+    )
+
+    if problems:
+        print("\nISU Dining API looks different. Last good data was kept.")
+        print("\n".join(f"  - {p}" for p in problems))
+        sys.exit(1)
 
 
 if __name__ == "__main__":

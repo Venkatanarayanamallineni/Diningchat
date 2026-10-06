@@ -1,2 +1,2 @@
-requests
-tzdata
+requests==2.34.2
+tzdata==2026.5

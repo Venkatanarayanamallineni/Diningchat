@@ -37,6 +37,11 @@ VENUES = {
     56: "West Side Market",
 }
 
+
+class ApiChanged(Exception):
+    """ISU's response no longer looks like what this code expects."""
+
+
 session = requests.Session()
 session.headers["User-Agent"] = "Mozilla/5.0"
 
@@ -56,11 +61,17 @@ def _hhmm(value):
 
 def get_hours(day: date) -> dict:
     """{venue_id: [{"s": "HH:MM", "e": "HH:MM", "all_day": bool, "note": str}]} for open venues."""
-    res = session.get(f"{BASE_URL}/dining/hours", timeout=TIMEOUT, params={
-        "locs": ",".join(map(str, VENUES)), "date": day.isoformat(), "days": "1"})
+    res = session.get(
+        f"{BASE_URL}/dining/hours",
+        timeout=TIMEOUT,
+        params={"locs": ",".join(map(str, VENUES)), "date": day.isoformat(), "days": "1"},
+    )
     res.raise_for_status()
+    data = res.json()
+    if not isinstance(data, dict) or not isinstance(data.get("locs"), dict):
+        raise ApiChanged(f"hours {day}: no 'locs' object")
     out = {}
-    for vid_s, loc in (res.json().get("locs") or {}).items():
+    for vid_s, loc in data["locs"].items():
         windows = []
         for e in (loc.get("days") or {}).get(day.isoformat(), []):
             if e.get("all_day"):
@@ -103,7 +114,7 @@ def _allergens(ingredients):
     if not ingredients:
         return None
     for m in reversed(list(re.finditer(r"contains\s*:?\s*", ingredients, re.I))):
-        rest = ingredients[m.end():]
+        rest = ingredients[m.end() :]
         if re.match(r"(\d|less|not more|no more|one or more)", rest, re.I):
             continue
         rest = re.split(r"[.;]|\)\s", rest)[0].strip(" ,)")
@@ -123,12 +134,48 @@ ALLERGEN_TERMS = {
     "peanut": ["peanut"],
     "treenut": ["tree nut", "almond", "cashew", "pecan", "walnut", "hazelnut", "pistachio", "macadamia"],
     "fish": ["fish", "salmon", "tuna", "cod", "tilapia", "pollock", "anchov"],
-    "shellfish": ["shellfish", "crustacean", "shrimp", "prawn", "crab", "lobster", "crawfish", "clam", "scallop", "oyster"],
+    "shellfish": [
+        "shellfish",
+        "crustacean",
+        "shrimp",
+        "prawn",
+        "crab",
+        "lobster",
+        "crawfish",
+        "clam",
+        "scallop",
+        "oyster",
+    ],
     "sesame": ["sesame", "tahini"],
 }
-MEAT = ["chicken", "beef", "pork", "bacon", "sausage", "turkey", "ham", "pepperoni", "steak", "fish", "tuna",
-        "salmon", "shrimp", "meat", "brisket", "gyro", "chorizo", "salami", "anchov", "gelatin", "meatball",
-        "cod", "tilapia", "pollock", "crab", "lobster"]
+MEAT = [
+    "chicken",
+    "beef",
+    "pork",
+    "bacon",
+    "sausage",
+    "turkey",
+    "ham",
+    "pepperoni",
+    "steak",
+    "fish",
+    "tuna",
+    "salmon",
+    "shrimp",
+    "meat",
+    "brisket",
+    "gyro",
+    "chorizo",
+    "salami",
+    "anchov",
+    "gelatin",
+    "meatball",
+    "cod",
+    "tilapia",
+    "pollock",
+    "crab",
+    "lobster",
+]
 
 
 MEAT_RE = re.compile(r"\b(" + "|".join(MEAT) + r")(s|es)?\b|\banchov")
@@ -206,8 +253,11 @@ def get_menu(venue_id: int, day: date) -> list:
     """Flat list of menu items for one venue and day, section headers removed."""
     res = session.get(f"{BASE_URL}/venue/{venue_id}/menu/{day.isoformat()}", timeout=TIMEOUT)
     res.raise_for_status()
+    data = res.json()
+    if not isinstance(data, dict) or "meals" not in data:
+        raise ApiChanged(f"menu {venue_id} {day}: no 'meals' key")
     items, seen = [], {}
-    for meal_key, meal in (res.json().get("meals") or {}).items():
+    for meal_key, meal in (data["meals"] or {}).items():
         meal_name = _meal_name(meal, meal_key)
         for display in (meal.get("menu_displays") or {}).values():
             for group_name, group in (display.get("categories") or {}).items():
@@ -225,7 +275,10 @@ def get_menu(venue_id: int, day: date) -> list:
                     ingredients = item.get("ingredients")
                     allergens = _allergens(ingredients)
                     entry = {
-                        "v": venue_id, "n": name, "c": category, "m": [meal_name],
+                        "v": venue_id,
+                        "n": name,
+                        "c": category,
+                        "m": [meal_name],
                         "k": _pick(nut, ("kcal", "calories"), "calor"),
                         "p": _pick(nut, ("protein",)),
                         "f": _pick(nut, ("fat", "total fat")),

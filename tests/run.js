@@ -66,6 +66,9 @@ const CASES = [
   {ask: ['indian food'], has: ['No indian-style dishes']},
   {ask: ['cheesy'], not: ['Not sure', 'Couldn’t find']},
   {ask: ['lunch'], has: ['Lunch today']},
+  {ask: ['halal food'], has: ['can’t confirm halal']},
+  {ask: ['dinner at udm no dairy'], has: ['Hid', 'Roast Turkey'], not: ['Mashed Potatoes']},
+  {ask: ['vegetarian dinner no dairy'], not: ['Roast Turkey']},
 ];
 
 (async () => {
