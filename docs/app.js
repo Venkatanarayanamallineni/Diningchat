@@ -133,7 +133,8 @@ function buildAliases() {
 const ALLERGEN_WORDS = {Dairy: ['dairy', 'milk', 'lactose', 'cheese'], Gluten: ['gluten', 'wheat'], Egg: ['egg', 'eggs'], Soy: ['soy'],
   Peanut: ['peanut', 'peanuts', 'nut', 'nuts'], 'Tree nuts': ['nut', 'nuts', 'tree nut', 'tree nuts', 'almond', 'almonds'],
   Fish: ['fish'], Shellfish: ['shellfish', 'shrimp'], Sesame: ['sesame']};
-const ALLERGEN_TERMS = {Dairy: ['milk'], Gluten: ['wheat'], Egg: ['egg'], Soy: ['soy'], Peanut: ['peanut'],
+const ALLERGEN_TERMS = {Dairy: ['milk', 'whey', 'casein', 'butter', 'cream', 'cheese', 'yogurt', 'lactose', 'ghee'],
+  Gluten: ['wheat', 'barley', 'rye', 'semolina', 'durum', 'spelt', 'farro', 'couscous'], Egg: ['egg'], Soy: ['soy'], Peanut: ['peanut'],
   'Tree nuts': ['tree nut', 'almond', 'cashew', 'pecan', 'walnut', 'hazelnut', 'pistachio'],
   Fish: ['fish'], Shellfish: ['shellfish', 'shrimp', 'crab', 'lobster'], Sesame: ['sesame']};
 const MEAT = ['chicken', 'beef', 'pork', 'bacon', 'sausage', 'turkey', 'ham', 'pepperoni', 'steak', 'fish', 'tuna', 'salmon',
@@ -151,13 +152,40 @@ const STOP = new Set(('a an the i im me my we you your to of in on at for and or
   'suggestion ideas idea maybe kinda really just good great nice whats\'s anywhere somewhere eat ate grab grabbing go there\'s')
   .split(' '));
 
+// Cuisines and styles. ISU has no cuisine label, so match dish names.
+const CUISINES = {
+  indian: {label: 'Indian', words: ['indian', 'desi'], re: /curry|tikka|masala|naan|paneer|biryani|\bdal\b|daal|samosa|chana|korma|vindaloo|tandoori|pakora|chutney|saag|aloo|butter chicken/},
+  chinese: {label: 'Chinese', words: ['chinese'], re: /lo mein|chow mein|fried rice|orange chicken|kung pao|general tso|egg roll|spring roll|potsticker|dumpling|sweet (and|&) sour|szechuan|sichuan|wonton|mongolian|(beef|chicken) (and|&) broccoli|stir fry|bao\b|chinese/},
+  japanese: {label: 'Japanese', words: ['japanese'], re: /sushi|teriyaki|ramen|tempura|katsu|udon|miso|edamame|pok[eé]\b|gyoza|yakisoba|onigiri|bento|japanese/},
+  thai: {label: 'Thai', words: ['thai'], re: /pad thai|thai|satay|panang|massaman|tom yum|drunken noodle/},
+  korean: {label: 'Korean', words: ['korean'], re: /bulgogi|kimchi|bibimbap|gochujang|korean|japchae/},
+  vietnamese: {label: 'Vietnamese', words: ['vietnamese'], re: /\bpho\b|banh mi|vietnamese|vermicelli/},
+  mexican: {label: 'Mexican', words: ['mexican', 'tex mex', 'latin', 'latino'], re: /taco|burrito|quesadilla|enchilada|nacho|guac|fajita|tamale|carnitas|chorizo|elote|churro|pico de gallo|queso|al pastor|barbacoa|carne asada|mexican|refried|chimichanga|tortilla chip/},
+  italian: {label: 'Italian', words: ['italian'], re: /pasta|pizza|alfredo|marinara|lasagna|ravioli|penne|spaghetti|meatball|parmesan|parmigiana|calzone|risotto|bruschetta|tortellini|rigatoni|fettuccine|pesto|gnocchi|ziti|stromboli|garlic bread|italian/},
+  mediterranean: {label: 'Mediterranean', words: ['mediterranean', 'greek', 'middle eastern', 'arabic', 'arab'], re: /gyro|falafel|hummus|tzatziki|pita|feta|shawarma|kabob|kebab|tabbouleh|greek|mediterranean|couscous|kofta|halloumi|turmeric rice/},
+  american: {label: 'American comfort', words: ['american', 'comfort', 'comfort food'], re: /burger|fries|hot dog|mac (and|&) cheese|bbq|barbecue|wings|tenders|meatloaf|pot roast|grilled cheese|sloppy joe|fried chicken|mashed potato|cornbread|pulled pork|corn dog/},
+  cheesy: {label: 'Cheesy', words: ['cheesy', 'cheesey'], nameOnly: true, re: /chees|queso|quesadilla|alfredo|pizza|parm|mozzarella|cheddar|nacho/,
+    // plain cheese slices are toppings, not dishes
+    not: /^(white |yellow |sharp |shredded |sliced |vegan )?(american|cheddar|colby jack|gouda|swiss|pepper jack|provolone|mozzarella|feta|parmesan|blue|cotija|queso fresco|cheese)( cheese)?( slices?)?$/},
+  spicy: {label: 'Spicy', words: ['spicy', 'spice', 'hot and spicy'], nameOnly: true, re: /spicy|buffalo|jalape|sriracha|chipotle|cajun|szechuan|sichuan|habanero|nashville|ghost pepper|gochujang|vindaloo|diablo|firecracker|kung pao|harissa|peri peri|hot chicken/},
+};
+CUISINES.asian = {label: 'Asian', words: ['asian'], re: new RegExp(['chinese', 'japanese', 'thai', 'korean', 'vietnamese'].map(k => CUISINES[k].re.source).join('|'))};
+const CUISINE_SKIP = /condiment|topping|spread|dressing|sauce|toss in|cheese options|beverage|upgrade/i;
+const cuisineHit = (C, it) => !CUISINE_SKIP.test(it.c) && !/\b(sauce|dressing|glaze)$/i.test(it.n)
+  && C.re.test((C.nameOnly ? it.n : `${it.n} ${it.c}`).toLowerCase()) && !(C.not && C.not.test(it.n.toLowerCase()));
+function detectCuisine(t) {
+  for (const [key, c] of Object.entries(CUISINES)) if (c.words.some(w => t.includes(` ${w} `))) return key;
+  return null;
+}
+
 let VOCAB = new Set(), KEYWORDS = [];
 function buildVocab() {
   VOCAB = new Set(META.words || []);
   KEYWORDS = ['tomorrow', 'today', 'tonight', 'breakfast', 'lunch', 'dinner', 'brunch', ...WEEKDAYS, 'protein', 'calories',
     'calorie', 'vegetarian', 'vegan', 'open', 'closed', 'hours', 'dairy', 'gluten', 'healthy', 'build', 'bowl',
     ...new Set(ALIAS_LIST.flatMap(([a]) => a.split(' ')).filter(w => w.length > 3)),
-    ...Object.values(GROUPS).flatMap(g => [...g.words, ...g.subs.flatMap(sb => sb[2])]).filter(w => !w.includes(' '))];
+    ...Object.values(GROUPS).flatMap(g => [...g.words, ...g.subs.flatMap(sb => sb[2])]).filter(w => !w.includes(' ')),
+    ...Object.values(CUISINES).flatMap(c => c.words).filter(w => !w.includes(' '))];
 }
 function lev(a, b) {
   if (Math.abs(a.length - b.length) > 2) return 9;
@@ -246,7 +274,28 @@ function dietOk(it, o) {
 const SIDE_CATS = /dessert|cookie|ice cream|condiment|beverage|drink|candy|snack|chips|soda|coffee|tea|shake/i;
 
 const MEAL_RE = {breakfast: /breakfast|brunch/i, brunch: /brunch|breakfast|lunch/i, lunch: /lunch|brunch/i, dinner: /dinner|supper/i};
-const BREAKFASTY = /breakfast|pancake|waffle|omelet|french toast|hash brown|oatmeal|cereal|bagel|muffin/i;
+const BREAKFASTY = /breakfast|pancake|waffle|omelet|french toast|hash brown|oatmeal|cereal|bagel|muffin|scrambl|egg bite/i;
+const MEAL_NOTE = {breakfast: /breakfast|brunch/i, brunch: /brunch|breakfast|lunch/i, lunch: /lunch|brunch|continuous/i, dinner: /dinner|supper|continuous/i};
+// Hour windows for one meal at a venue: by the window's label first, else by clock time.
+function mealWindows(day, v, meal) {
+  const ws = windows(day, v);
+  const named = ws.filter(w => w.note && MEAL_NOTE[meal].test(w.note));
+  if (named.length) return named;
+  const [a, b] = MEALS[meal];  // needs 30+ min inside the meal's usual time
+  return ws.filter(w => w.all_day || Math.min(toMin(w.e), b) - Math.max(toMin(w.s), a) > 30);
+}
+const labeledMeals = items => items.some(i => (i.m || []).some(x => /breakfast|brunch|lunch|dinner|supper/i.test(x)));
+// Items for one meal. If the venue doesn't label meals, guess from the dish name.
+function forMeal(items, meal) {
+  if (labeledMeals(items)) return items.filter(i => servedAt(i, meal));
+  return items.filter(i => meal === 'breakfast' ? BREAKFASTY.test(`${i.n} ${i.c}`) : servedAt(i, meal));
+}
+const shortDay = d => cap(dayLabel(d)).split(',')[0];
+function mealChips(day, v, skip) {
+  const sfx = day === ames().date ? '' : ` ${shortDay(day).toLowerCase()}`;
+  return ['breakfast', 'lunch', 'dinner'].filter(m => m !== skip && mealWindows(day, v, m).length)
+    .map(m => `${cap(m)} at ${vname(v)}${sfx}`);
+}
 function servedAt(it, meal) {
   const named = (it.m || []).filter(x => /breakfast|brunch|lunch|dinner|supper/i.test(x));
   if (named.length) return named.some(x => MEAL_RE[meal].test(x));
@@ -344,10 +393,27 @@ async function answerVenueMenu(q) {
   let day = q.day;
   const st = statusNow(v);
   if (!q.dayExplicit && st.state === 'closed' && st.nextDay) day = st.nextDay;
-  const hrs = hoursText(day, v);
+  let hrs = hoursText(day, v);
   if (hrs === 'Closed') return {say: `<b>${n}</b> is closed ${dayLabel(day)}.`, chips: [`When is ${vname(v)} open?`]};
-  const items = (await menu(day)).filter(i => String(i.v) === v);
+  let items = (await menu(day)).filter(i => String(i.v) === v);
   if (!items.length) return {say: `<b>${n}</b> is open ${dayLabel(day)} (${esc(hrs)}) but the menu isn’t posted yet.`};
+
+  // "dinner at udm": only that meal. No meal named: the whole menu, like before.
+  let when = dayLabel(day), note = '';
+  if (q.meal) {
+    const mw = mealWindows(day, v, q.meal);
+    when = `${q.meal} ${dayLabel(day)}`.replace('dinner today', 'dinner tonight');
+    if (!mw.length) return {say: `<b>${n}</b> doesn’t serve ${q.meal} ${dayLabel(day)}. Hours: ${esc(hrs)}.`,
+      chips: [...mealChips(day, v, q.meal), 'What’s open now?']};
+    hrs = mw.map(w => w.all_day ? 'all day' : `${fmt(w.s)}–${fmt(w.e)}`).join(', ');
+    const only = forMeal(items, q.meal);
+    if (!only.length) note = `<div class="note">No items marked for ${q.meal} here, so this is the full menu.</div>`;
+    else {
+      if (!labeledMeals(items)) note = '<div class="note">Same menu all day here. Best guess for this meal.</div>';
+      items = only;
+    }
+  }
+  const chips = [...mealChips(day, v, q.meal).slice(0, 2), `Build a meal at ${vname(v)}`, `Is ${vname(v)} open now?`];
   const cats = {};
   items.forEach(i => (cats[i.c] = cats[i.c] || []).push(i));
   const stem = f => f.replace(/e?s$/, '');
@@ -355,13 +421,52 @@ async function answerVenueMenu(q) {
   const byItem = q.food.length ? items.filter(i => q.food.every(f => norm(i.n).includes(stem(f)))) : [];
   if (wanted.length || byItem.length) {
     const list = wanted.length ? wanted.flatMap(c => cats[c]) : byItem;
-    return {say: `At <b>${n}</b> ${dayLabel(day)} (${esc(hrs)}):`, html: `<div class="card">${list.slice(0, 30).map(itemRow).join('')}</div>`,
-      chips: [`Build a meal at ${vname(v)}`, `Is ${vname(v)} open now?`]};
+    return {say: `At <b>${n}</b> ${when} (${esc(hrs)}):`, html: `<div class="card">${list.slice(0, 30).map(itemRow).join('')}</div>` + note, chips};
   }
-  if (q.food.length) return {say: `Didn’t see “${esc(q.food.join(' '))}” at <b>${n}</b> ${dayLabel(day)}. Here’s what they have:`,
-    html: catCard(cats), chips: [`Where can I get ${q.food.join(' ')}?`]};
-  return {say: `<b>${n}</b> ${dayLabel(day)}, ${esc(hrs)}. Tap a section:`, html: catCard(cats),
-    chips: [`Build a meal at ${vname(v)}`, `Is ${vname(v)} open now?`]};
+  if (q.food.length) return {say: `Didn’t see “${esc(q.food.join(' '))}” at <b>${n}</b> ${when}. Here’s what they have:`,
+    html: catCard(cats) + note, chips: [`Where can I get ${q.food.join(' ')}?`, ...chips]};
+  return {say: `<b>${n}</b> ${when}, ${esc(hrs)}. Tap a section:`, html: catCard(cats) + note, chips};
+}
+
+async function answerCuisine(q, key) {
+  const C = CUISINES[key], today = ames().date;
+  const dates = q.dayExplicit ? [q.day] : [...Array(DAYS).keys()].map(i => addDays(today, i));
+  const all = await Promise.all(dates.map(menu));
+  const extra = q.food.filter(f => !C.words.includes(f) && !C.re.test(f));  // "indian chicken" also needs "chicken"
+  const stem = f => f.replace(/e?s$/, '');
+  const collect = useExtra => dates.map((d, i) => {
+    const byV = {};
+    for (const it of all[i]) {
+      if (q.venue && String(it.v) !== q.venue) continue;
+      if (!cuisineHit(C, it)) continue;
+      if (useExtra && !extra.every(f => norm(it.n).includes(stem(f)))) continue;
+      if (q.meal && !servedAt(it, q.meal)) continue;
+      if (!dietOk(it, q) || (q.avoid.length && allergenStatus(it, q.avoid) !== 'ok')) continue;
+      const list = byV[it.v] = byV[it.v] || [];
+      if (!list.some(x => x.n === it.n)) list.push(it);
+    }
+    return {d, byV};
+  }).filter(x => Object.keys(x.byV).length);
+  let found = extra.length ? collect(true) : [];
+  if (!found.length) found = collect(false);
+
+  const what = `${C.label}${C.nameOnly ? '' : '-style'}`, where = q.venue ? ` at <b>${esc(vname(q.venue))}</b>` : '';
+  const meal = q.meal ? ` ${q.meal}` : '';
+  if (!found.length) return {say: `No ${what.toLowerCase()} dishes${where}${meal} ${q.dayExplicit ? dayLabel(q.day) : 'on menus this week'}.`,
+    html: '<div class="note">I match dish names, so some may be missed. Try a dish name like “curry” or “tacos”.</div>',
+    chips: ['What’s open now?', 'Italian', 'Mexican', 'Asian'].filter(c => c.toLowerCase() !== key)};
+
+  const first = found[0], isToday = first.d === today;
+  const isOpen = v => isToday && statusNow(v).state === 'open';
+  const vs = Object.keys(first.byV).sort((a, b) => isOpen(b) - isOpen(a) || first.byV[b].length - first.byV[a].length);
+  const say = isToday ? `${what} dishes${where}${meal} today at <b>${vs.length} place${vs.length > 1 ? 's' : ''}</b>:`
+    : `No ${what.toLowerCase()} dishes${where}${meal} ${q.dayExplicit ? dayLabel(q.day) : 'today'}. Next: <b>${dayLabel(first.d) === 'tomorrow' ? 'tomorrow' : shortDay(first.d)}</b>`;
+  const cards = vs.slice(0, 4).map(v => `<div class="card"><div class="row">${vlink(v)}${isToday ? statusBadge(statusNow(v)) : ''}</div>
+    <div class="dim">${esc(hoursText(first.d, v))}</div>${first.byV[v].slice(0, 5).map(itemRow).join('')}${first.byV[v].length > 5 ? `<div class="note">+${first.byV[v].length - 5} more</div>` : ''}</div>`).join('');
+  const later = found.slice(1, 4).map(x => `<b>${shortDay(x.d)}</b>: ${esc(Object.keys(x.byV).map(vname).slice(0, 3).join(', '))}`);
+  const html = cards + (later.length ? `<div class="note">Also coming up · ${later.join(' · ')}</div>` : '')
+    + '<div class="note">Matched by dish names, not an official ISU label.</div>';
+  return {say, html, chips: [...found.slice(1, 3).map(x => `${C.label} ${shortDay(x.d).toLowerCase()}`), `Is ${vname(vs[0])} open now?`, 'What’s open now?']};
 }
 
 async function answerFind(q) {
@@ -375,6 +480,7 @@ async function answerFind(q) {
     dates.forEach((d, i) => {
       for (const it of all[i]) {
         if (!hit(it, strict)) continue;
+        if (q.meal && !servedAt(it, q.meal)) continue;
         if (!dietOk(it, q)) continue;
         if (q.avoid.length && allergenStatus(it, q.avoid) !== 'ok') continue;
         const b = byVenue[it.v] = byVenue[it.v] || {date: d, items: []};
@@ -406,7 +512,8 @@ async function answerPlan(q) {
   let day = q.dayExplicit ? q.day : today;
   if (q.venue && !q.dayExplicit && statusNow(q.venue).state === 'closed' && statusNow(q.venue).nextDay) day = statusNow(q.venue).nextDay;
   const meal = q.meal || (day === today ? mealNow() : null);
-  const items = await menu(day);
+  const cu = CUISINES[detectCuisine(q.t)];
+  const items = (await menu(day)).filter(i => !cu || cuisineHit(cu, i));
   let venues = q.venue ? [q.venue] : VIDS().filter(v => windows(day, v).length && (day !== today || statusNow(v).state !== 'closed'));
   if (meal && !q.venue) {
     const [a, b] = MEALS[meal];
@@ -418,7 +525,8 @@ async function answerPlan(q) {
   const opts = {maxK: q.maxK, minP: q.minP, avoid: q.avoid, noMeat: q.noMeat, vegan: q.vegan, opt: q.opt, meal,
     maxItems: / bowl /.test(q.t) ? 5 : 3, skipSides: !q.food.some(f => SIDE_CATS.test(f))};
   const results = venues.map(v => ({v, r: plan(items.filter(i => String(i.v) === v), opts)})).filter(x => x.r.best.length);
-  if (!results.length) return {say: `No menus posted for ${when} yet.`};
+  if (!results.length) return cu ? {say: `No ${cu.label.toLowerCase()} dishes for ${when}.`, chips: [`${cu.label} this week`, 'What’s open now?']}
+    : {say: `No menus posted for ${when} yet.`};
   results.sort((a, b) => (b.r.met - a.r.met) || (q.near && POS ? (walkMin(a.v) ?? 99) - (walkMin(b.v) ?? 99) : 0) || (b.r.s - a.r.s));
   const hits = results.filter(x => x.r.met);
 
@@ -607,14 +715,17 @@ async function respond(text) {
     // "what about tomorrow" repeats the last question for a new day; "is it open" reuses the last venue
     const words = q.t.trim().split(' ');
     const onlyDay = q.dayExplicit && words.every(w => FILLER.has(w) || DAY_WORDS.has(w));
-    if (onlyDay) q = {...last, day: q.day, dayExplicit: true};
+    const onlyMeal = q.meal && (last.venue || last.food.length || detectCuisine(last.t)) && words.every(w => FILLER.has(w) || DAY_WORDS.has(w) || w in MEALS);
+    if (onlyMeal) q = {...last, meal: q.meal, t: last.t.replace(/ (breakfast|brunch|lunch|dinner) /g, ' ') + `${q.meal} `,
+      ...(q.dayExplicit ? {day: q.day, dayExplicit: true} : {})};
+    else if (onlyDay) q = {...last, day: q.day, dayExplicit: true};
     else if (!q.venue && last.venue && / (it|there|that place|they|them) /.test(q.t)) q.venue = last.venue;
   }
   last = q;
   applyPrefs(q);
   const a = await route(q);
   if (q.corrected) a.say = `<span class="dim">Showing results for “${esc(q.corrected)}”</span><br>` + (a.say || '');
-  a.route = q.pay ? 'pay' : (q.near && !q.wantPlan) ? 'near' : (q.wantPlan || (q.noMeat && !q.food.length)) ? 'plan' : q.wantHours ? 'hours' : detectGroup(q.t) ? 'group'
+  a.route = q.pay ? 'pay' : (q.near && !q.wantPlan) ? 'near' : (q.wantPlan || (q.noMeat && !q.food.length)) ? 'plan' : q.wantHours ? 'hours' : detectCuisine(q.t) ? 'cuisine' : detectGroup(q.t) ? 'group'
     : q.venue ? 'venue' : q.food.length ? 'find' : q.meal ? 'meal' : 'other';
   if (q.usedPrefs?.length && ['plan', 'group', 'find'].includes(a.route) && !a.needLocation)
     a.say = (a.say || '') + `<div class="note">Using your saved prefs: ${esc(q.usedPrefs.join(', '))}.</div>`;
@@ -633,6 +744,8 @@ async function route(q) {
     }
     return answerOpenNow(q);
   }
+  const cu = detectCuisine(q.t);
+  if (cu) return answerCuisine(q, cu);
   if (q.noMeat && !q.food.length) return answerPlan({...q, wantPlan: true});
   const grp = detectGroup(q.t.replace(/ all /, ' '));
   if (grp) return answerGroup(q, grp.key, grp.sub);
@@ -642,4 +755,3 @@ async function route(q) {
   if (q.unknown.length) return {say: `Couldn’t find “${esc(q.unknown.join(' '))}” on any menu this week.`, chips: HELP.chips};
   return {say: 'Not sure what you mean. Try one of these:', chips: HELP.chips};
 }
-
