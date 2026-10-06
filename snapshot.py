@@ -13,10 +13,12 @@ from datetime import timedelta
 
 import requests
 
+import isu_dining
 from isu_dining import VENUES, get_hours, get_menu, now_ames
 
 OUT = os.path.join(os.path.dirname(os.path.abspath(__file__)), "docs", "data")
 MENU_DAYS = 7
+FMT = 3  # bump when the menu item format changes, so old files get rebuilt
 
 
 def read_json(path, default):
@@ -48,14 +50,15 @@ def main():
             if key in old_meta.get("hours", {}):
                 hours[key] = old_meta["hours"][key]
 
-    # Today and tomorrow refresh every run. Later days only when missing.
+    # Today and tomorrow refresh every run. Later days only when missing, empty, or old format.
     for i in range(MENU_DAYS):
         day = today + timedelta(days=i)
         key = day.isoformat()
         path = os.path.join(OUT, f"menu-{key}.json")
-        if i >= 2 and os.path.exists(path):
+        old = read_json(path, {})
+        old_items = old.get("items", [])
+        if i >= 2 and old_items and old.get("fmt") == FMT:
             continue
-        old_items = read_json(path, {}).get("items", [])
         items = []
         for vid in map(int, hours.get(key, {})):
             try:
@@ -63,12 +66,14 @@ def main():
             except requests.RequestException:
                 items += [x for x in old_items if x["v"] == vid]
         if items or not old_items:
-            write_json(path, {"date": key, "items": items})
+            write_json(path, {"date": key, "fmt": FMT, "items": items})
             print(f"menu {key}: {len(items)} items")
 
     for name in os.listdir(OUT):
         if name.startswith("menu-") and name[5:15] < today.isoformat():
             os.remove(os.path.join(OUT, name))
+
+    print("meal fields seen:", sorted(isu_dining.MEAL_FIELDS))
 
     # Every word that shows up on a menu this week. The site uses it to tell
     # food words apart from normal words and to fix typos.
