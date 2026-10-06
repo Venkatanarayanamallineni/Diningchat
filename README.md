@@ -2,7 +2,7 @@
 
 Unofficial ISU dining guide. Free, no login, works on any phone.
 
-**Live:** https://YOUR-USERNAME.github.io/dining-now/
+**Live:** https://venkatanarayanamallineni.github.io/Diningchat/
 
 ## Features
 
