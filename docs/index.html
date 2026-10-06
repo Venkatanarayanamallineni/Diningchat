@@ -171,8 +171,8 @@ input[type=number] { width: 100%; font: inherit; font-size: 16px; color: var(--i
 const $ = s => document.querySelector(s);
 
 // ---------- settings you fill in ----------
-const FEEDBACK_FORM = '';  // Google Form prefilled link, with the word QUESTION where the text goes
-const GOATCOUNTER = '';    // e.g. 'https://yourname.goatcounter.com/count'
+const FEEDBACK_FORM = 'https://forms.gle/SzEtxdfkYYY3Up2b6';  // Google Form prefilled link, with the word QUESTION where the text goes
+const GOATCOUNTER = 'https://diningnow.goatcounter.com/count';    // e.g. 'https://yourname.goatcounter.com/count'
 
 const store = {
   get(k, d) { try { return JSON.parse(localStorage.getItem(k)) ?? d; } catch { return d; } },
