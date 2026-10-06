@@ -67,6 +67,13 @@ const CASES = [
   {ask: ['cheesy'], not: ['Not sure', 'Couldn’t find']},
   {ask: ['lunch'], has: ['Lunch today']},
   {ask: ['halal food'], has: ['can’t confirm halal']},
+  {ask: ['places open after 9pm'], has: ['open after 9 PM tonight', 'Friley Windows', 'East Side Market', 'Hawthorn'], not: ['Clyde', 'Plato']},
+  {ask: ['what is open after 9'], has: ['after 9 PM'], not: ['Clyde']},
+  {ask: ['is udm open at 7am tomorrow'], has: ['Yes', 'Union Drive']},
+  {ask: ['is plato open at 8pm'], has: ['No', 'Heaping Plato']},
+  {ask: ['open till midnight'], has: ['Nothing is open till midnight']},
+  {ask: ['open before 8am tomorrow'], has: ['Union Drive'], not: ['Heaping Plato']},
+  {ask: ['high protein meal under 700 at 7pm'], has: ['under 700 kcal']},
   {ask: ['dinner at udm no dairy'], has: ['Hid', 'Roast Turkey'], not: ['Mashed Potatoes']},
   {ask: ['vegetarian dinner no dairy'], not: ['Roast Turkey']},
 ];
