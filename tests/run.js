@@ -55,6 +55,17 @@ const CASES = [
   {ask: ['high protein dinner'], prefs: {diet: 'vegetarian'}, has: ['Using your saved prefs: vegetarian'], not: ['Roast Turkey', 'Salmon']},
   {ask: ['drinks'], prefs: {avoid: ['Dairy']}, not: ['Shake', 'Protein Smoothie']},
   {ask: ['high protein dinner'], prefs: {protein: 40}, has: ['40g+ protein']},
+  {ask: ['dinner at udm'], has: ['Roast Turkey', 'dinner tonight'], not: ['Scrambled Eggs']},
+  {ask: ['breakfast at udm'], has: ['Scrambled Eggs'], not: ['Roast Turkey']},
+  {ask: ['whats at udm'], has: ['Scrambled Eggs', 'Roast Turkey']},
+  {ask: ['dinner at udm', 'what about breakfast'], has: ['Scrambled Eggs'], not: ['Roast Turkey']},
+  {ask: ['breakfast at plato'], has: ['doesn’t serve breakfast']},
+  {ask: ['italian food'], has: ['Italian-style', 'Pasta Marinara']},
+  {ask: ['japanese'], has: ['Teriyaki']},
+  {ask: ['chineese'], not: ['Not sure', 'Couldn’t find']},
+  {ask: ['indian food'], has: ['No indian-style dishes']},
+  {ask: ['cheesy'], not: ['Not sure', 'Couldn’t find']},
+  {ask: ['lunch'], has: ['Lunch today']},
 ];
 
 (async () => {
