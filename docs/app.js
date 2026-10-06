@@ -19,14 +19,14 @@ const VENUE_INFO = {
   8: {pay: 'retail', lat: 42.03383, lng: -93.64283},    // Hawthorn, Frederiksen Court
   11: {pay: 'retail', lat: 42.02319, lng: -93.64560},   // Memorial Union Food Court
   19: {pay: 'retail', lat: 42.02351, lng: -93.64564},   // Lance and Ellie's, MU
-  21: {pay: 'retail', lat: 42.02717, lng: -93.64844},   // The Roasterie
+  21: {pay: 'retail', cafe: true, lat: 42.02717, lng: -93.64844},   // The Roasterie
   22: {pay: 'retail', lat: 42.02717, lng: -93.64844},   // Heaping Plato
-  48: {pay: 'retail', lat: 42.02813, lng: -93.64881},   // Bookends, Parks Library
-  49: {pay: 'retail', lat: 42.02509, lng: -93.64469},   // Business Cafe, Gerdin
-  50: {pay: 'retail', lat: 42.02991, lng: -93.64561},   // Courtyard Cafe, Lagomarcino
-  51: {pay: 'retail', lat: 42.02844, lng: -93.65317},   // Design Cafe
-  52: {pay: 'retail', lat: 42.01020, lng: -93.63150},   // Gentle Doctor Cafe, Vet Med, 1800 Christensen Dr
-  10: {pay: 'retail', lat: 42.02319, lng: -93.64560},   // Charging Station, inside MU Food Court
+  48: {pay: 'retail', cafe: true, lat: 42.02813, lng: -93.64881},   // Bookends, Parks Library
+  49: {pay: 'retail', cafe: true, lat: 42.02509, lng: -93.64469},   // Business Cafe, Gerdin
+  50: {pay: 'retail', cafe: true, lat: 42.02991, lng: -93.64561},   // Courtyard Cafe, Lagomarcino
+  51: {pay: 'retail', cafe: true, lat: 42.02844, lng: -93.65317},   // Design Cafe
+  52: {pay: 'retail', cafe: true, lat: 42.01020, lng: -93.63150},   // Gentle Doctor Cafe, Vet Med, 1800 Christensen Dr
+  10: {pay: 'retail', cafe: true, lat: 42.02319, lng: -93.64560},   // Charging Station, inside MU Food Court
   60: {pay: 'center', lat: 42.01392, lng: -93.65078},   // South Side Eats
 };
 const PAY_LABEL = {center: 'Dining center · meal swipe', getgo: 'GET & Go · swipe or Dining Dollars', retail: 'Dining Dollars or Flex Meal'};
@@ -665,6 +665,38 @@ function detectGroup(t) {
   return null;
 }
 
+// Coffee and energy drinks. Cafés sell them even when ISU's menu doesn't list them,
+// so cafés (VENUE_INFO cafe: true) are always included.
+const NOT_DRINK = /gelato|ice cream|cake|cookie|crunch|brownie|muffin|scone|sundae|cone|\bbars?\b|candy|truffle|crumble/i;
+async function answerDrinkSpots(q, grp) {
+  const today = ames().date, day = q.dayExplicit ? q.day : today;
+  const energy = grp.sub === 'Energy drinks';
+  const sub = grp.sub && GROUPS[grp.key].subs.find(sb => sb[0] === grp.sub);
+  const re = sub ? sub[1] : GROUPS.drinks.subs.find(sb => sb[0] === 'Coffee')[1];
+  const what = grp.sub ? grp.sub.toLowerCase() : 'coffee';
+  const venues = (q.venue ? [q.venue] : VIDS()).filter(v => windows(day, v).length && (day !== today || statusNow(v).state !== 'closed'));
+  const byV = {};
+  for (const it of await menu(day)) {
+    if (!venues.includes(String(it.v)) || NOT_DRINK.test(it.n) || !re.test(`${it.n} ${it.c}`.toLowerCase())) continue;
+    if ((q.avoid.length && allergenStatus(it, q.avoid) !== 'ok') || !dietOk(it, q)) continue;
+    const list = byV[it.v] = byV[it.v] || [];
+    if (!list.includes(it.n)) list.push(it.n);
+  }
+  const ids = venues.filter(v => byV[v] || VENUE_INFO[v]?.cafe);
+  const when = day === today ? 'today' : dayLabel(day);
+  if (!ids.length) return {say: `No ${what} spots open ${when}.`, chips: ['What’s open now?']};
+  const isOpen = v => day === today && statusNow(v).state === 'open';
+  const left = v => { const st = statusNow(v); return st.allDay ? 9999 : st.left || 0; };
+  ids.sort((a, b) => isOpen(b) - isOpen(a) || (POS ? (walkMin(a) ?? 99) - (walkMin(b) ?? 99) : left(b) - left(a)));
+  const open = ids.filter(isOpen);
+  let say = `${cap(what)} ${when}: <b>${ids.length} place${ids.length > 1 ? 's' : ''}</b>${day === today ? `, ${open.length} open now` : ''}.`;
+  if (q.near && POS && open.length) say = `Closest open for ${what}: <b>${esc(vname(open[0]))}</b>${walkMin(open[0]) != null ? `, about ${walkMin(open[0])} min walk` : ''}.`;
+  const html = rowCard(ids.slice(0, 10).map(v => `<div class="item"><div class="row">${vlink(v)}${day === today ? statusBadge(statusNow(v)) : ''}</div>
+    <div class="nums">${byV[v] ? esc(byV[v].slice(0, 3).join(', ')) + (byV[v].length > 3 ? ` +${byV[v].length - 3} more` : '') : (['Coffee', 'Brewed coffee', 'Energy drinks'].includes(grp.sub) || !grp.sub ? 'Café: coffee and energy drinks (not on ISU’s menu)' : `Café. ${cap(what)} not on ISU’s menu, ask at the counter.`)}</div></div>`))
+    + '<div class="note">Cafés sell coffee and energy drinks even when ISU’s menu doesn’t list them.</div>';
+  return {say, html, chips: [energy ? 'Coffee near me' : 'Energy drinks near me', 'What’s open now?', 'Drinks']};
+}
+
 async function answerGroup(q, key, only) {
   const G = GROUPS[key], today = ames().date;
   const day = q.dayExplicit ? q.day : today;
@@ -802,6 +834,7 @@ async function route(q) {
   if (cu) return answerCuisine(q, cu);
   if (q.noMeat && !q.food.length) return answerPlan({...q, wantPlan: true});
   const grp = detectGroup(q.t.replace(/ all /, ' '));
+  if (grp && (grp.key === 'coffee' || (grp.key === 'drinks' && ['Coffee', 'Energy drinks'].includes(grp.sub)))) return answerDrinkSpots(q, grp);
   if (grp) return answerGroup(q, grp.key, grp.sub);
   if (q.venue) return answerVenueMenu(q);
   if (q.food.length) return answerFind(q);
