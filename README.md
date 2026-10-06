@@ -2,7 +2,7 @@
 
 Unofficial ISU dining guide. Free, no login, works on any phone.
 
-**Live:** https://venkatanarayanamallineni.github.io/Diningchat/
+**Live:** https://YOUR-USERNAME.github.io/dining-now/
 
 ## Features
 
@@ -38,6 +38,17 @@ Open http://localhost:8000
 `extension/` is a small popup that shows the site. Change the link in `popup.html` to your Pages URL.
 - Try it: `chrome://extensions` > Developer mode > Load unpacked > pick `extension/`
 - Publish: Edge Add-ons and Firefox Add-ons are free. Chrome Web Store has a one-time $5 fee.
+
+## Tests
+
+`node tests/run.js` asks 35 real questions against fixed sample data (`tests/fixture.json`) and checks the answers. GitHub runs it before every deploy, so a change that breaks answers never goes live. When you find a wrong answer, add it to `CASES` in `tests/run.js`.
+
+## Settings to fill in (top of the script in `docs/index.html`)
+
+- `FEEDBACK_FORM`: Google Form prefilled link (see below)
+- `GOATCOUNTER`: your GoatCounter count URL, e.g. `https://yourname.goatcounter.com/count`. Only counts question types, never the text
+
+Venue payment types and map locations are in `VENUE_INFO` at the top of `docs/app.js`. Fix anything wrong there.
 
 ## Feedback button
 

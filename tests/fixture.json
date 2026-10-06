@@ -1,0 +1,4052 @@
+{
+"meta": {
+"generated_at": "test",
+"ts": 0,
+"venues": {
+"39": "Union Drive Marketplace",
+"30": "Friley Windows",
+"22": "Heaping Plato",
+"38": "Clyde's",
+"11": "Memorial Union Food Court",
+"8": "Hawthorn",
+"54": "Whirlybird's",
+"21": "The Roasterie",
+"58": "East Side Market",
+"1": "Conversations"
+},
+"hours": {
+"2026-10-05": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+},
+"2026-10-06": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+},
+"2026-10-07": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+},
+"2026-10-08": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+},
+"2026-10-09": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+},
+"2026-10-10": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+},
+"2026-10-11": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+},
+"2026-10-12": {
+"39": [
+{
+"s": "07:00",
+"e": "10:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "16:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"30": [
+{
+"s": "10:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+},
+{
+"s": "19:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"22": [
+{
+"s": "10:00",
+"e": "14:30",
+"all_day": false,
+"note": "Lunch"
+}
+],
+"38": [
+{
+"s": "07:30",
+"e": "20:00",
+"all_day": false,
+"note": null
+}
+],
+"11": [
+{
+"s": "07:30",
+"e": "19:00",
+"all_day": false,
+"note": null
+}
+],
+"8": [
+{
+"s": "07:30",
+"e": "10:30",
+"all_day": false,
+"note": "Breakfast"
+},
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": "Lunch/Dinner"
+}
+],
+"54": [
+{
+"s": "10:00",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+],
+"21": [
+{
+"s": "07:30",
+"e": "17:00",
+"all_day": false,
+"note": null
+}
+],
+"58": [
+{
+"s": "07:30",
+"e": "23:00",
+"all_day": false,
+"note": null
+}
+],
+"1": [
+{
+"s": "10:30",
+"e": "22:00",
+"all_day": false,
+"note": null
+}
+]
+}
+},
+"words": [
+"apple",
+"bacon",
+"bar",
+"base",
+"bean",
+"beans",
+"berry",
+"beverages",
+"black",
+"bowl",
+"breakfast",
+"brew",
+"brown",
+"bull",
+"burger",
+"burgers",
+"burrito",
+"caramel",
+"celsius",
+"chicken",
+"chip",
+"chocolate",
+"coffee",
+"cold",
+"cookie",
+"cucumber",
+"dasani",
+"desserts",
+"dressings",
+"drink",
+"eggs",
+"entree",
+"espresso",
+"falafel",
+"feta",
+"fountain",
+"garden",
+"garlic",
+"green",
+"grilled",
+"latte",
+"lemon",
+"marinara",
+"mashed",
+"mystery",
+"options",
+"pasta",
+"pie",
+"pita",
+"pot",
+"potatoes",
+"protein",
+"quinoa",
+"ramen",
+"red",
+"rice",
+"roast",
+"salad",
+"salads",
+"salmon",
+"scrambled",
+"shake",
+"shakes",
+"sides",
+"smoothie",
+"smoothies",
+"snack",
+"snacks",
+"strawberry",
+"teriyaki",
+"toppings",
+"turkey",
+"tzatziki",
+"water",
+"wrap",
+"wraps"
+],
+"diet_labels": true
+},
+"menus": {
+"2026-10-05": [
+{
+"v": 39,
+"n": "Roast Turkey",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 42,
+"mt": 1
+},
+{
+"v": 39,
+"n": "Mashed Potatoes",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Green Beans",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 60,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 39,
+"n": "Scrambled Eggs",
+"c": "Breakfast",
+"m": [
+"Breakfast"
+],
+"k": 200,
+"p": 14,
+"t": [
+"egg"
+],
+"a": "Egg"
+},
+{
+"v": 39,
+"n": "Chocolate Chip Cookie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 220,
+"p": 2,
+"t": [
+"dairy",
+"gluten",
+"egg"
+],
+"a": "Dairy, Gluten, Egg"
+},
+{
+"v": 39,
+"n": "Pasta Marinara",
+"c": "Pasta Bar",
+"m": [
+"Dinner"
+],
+"k": 400,
+"p": 12,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"d": [
+"vegetarian"
+]
+},
+{
+"v": 39,
+"n": "Black Bean Burger",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 380,
+"p": 18,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy",
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Grilled Salmon",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 350,
+"p": 34,
+"t": [
+"fish"
+],
+"a": "Fish",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Quinoa",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 7,
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Chicken Pot Pie",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 520,
+"p": 22,
+"t": [
+"dairy",
+"gluten"
+],
+"a": "Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Apple Pie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 3,
+"t": [
+"gluten",
+"dairy"
+],
+"a": "Gluten, Dairy"
+},
+{
+"v": 22,
+"n": "Pita",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 200,
+"p": 7,
+"t": [
+"gluten"
+],
+"a": "Gluten"
+},
+{
+"v": 22,
+"n": "Brown Rice",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 220,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Lemon Garlic Chicken",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 230,
+"p": 30,
+"mt": 1
+},
+{
+"v": 22,
+"n": "Falafel",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 250,
+"p": 9,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Feta",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 80,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 22,
+"n": "Cucumber",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 10,
+"p": 0,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Tzatziki",
+"c": "Dressings",
+"m": [
+"Lunch"
+],
+"k": 60,
+"p": 2,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Strawberry Shake",
+"c": "Shakes",
+"m": [
+"Dinner"
+],
+"k": 600,
+"p": 12,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Turkey Burger",
+"c": "Burgers",
+"m": [
+"Dinner"
+],
+"k": 450,
+"p": 30,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 38,
+"n": "Garden Salad",
+"c": "Salads",
+"m": [
+"Dinner"
+],
+"k": 120,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Berry Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Chicken Teriyaki Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 550,
+"p": 32,
+"t": [
+"soy",
+"gluten"
+],
+"a": "Soy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Fountain Drink",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 150,
+"p": 0
+},
+{
+"v": 8,
+"n": "Red Bull",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 110,
+"p": 0
+},
+{
+"v": 8,
+"n": "Bacon Breakfast Burrito",
+"c": "Wraps",
+"m": [
+"Breakfast"
+],
+"k": 599,
+"p": 32,
+"t": [
+"egg",
+"dairy",
+"gluten"
+],
+"a": "Egg, Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Grilled Chicken Wrap",
+"c": "Wraps",
+"m": [
+"Lunch/Dinner"
+],
+"k": 480,
+"p": 38,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 21,
+"n": "Caramel Latte",
+"c": "Espresso",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 8,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 21,
+"n": "Cold Brew",
+"c": "Coffee",
+"m": [
+"Dinner"
+],
+"k": 5,
+"p": 0
+},
+{
+"v": 58,
+"n": "Celsius",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 10,
+"p": 0
+},
+{
+"v": 58,
+"n": "Dasani Water",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 0,
+"p": 0
+},
+{
+"v": 58,
+"n": "Mystery Snack",
+"c": "Snacks",
+"m": [
+"Dinner"
+],
+"k": 100,
+"p": 1,
+"u": 1
+},
+{
+"v": 54,
+"n": "Protein Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 320,
+"p": 25,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+}
+],
+"2026-10-06": [
+{
+"v": 39,
+"n": "Roast Turkey",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 42,
+"mt": 1
+},
+{
+"v": 39,
+"n": "Mashed Potatoes",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Green Beans",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 60,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 39,
+"n": "Scrambled Eggs",
+"c": "Breakfast",
+"m": [
+"Breakfast"
+],
+"k": 200,
+"p": 14,
+"t": [
+"egg"
+],
+"a": "Egg"
+},
+{
+"v": 39,
+"n": "Chocolate Chip Cookie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 220,
+"p": 2,
+"t": [
+"dairy",
+"gluten",
+"egg"
+],
+"a": "Dairy, Gluten, Egg"
+},
+{
+"v": 39,
+"n": "Pasta Marinara",
+"c": "Pasta Bar",
+"m": [
+"Dinner"
+],
+"k": 400,
+"p": 12,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"d": [
+"vegetarian"
+]
+},
+{
+"v": 39,
+"n": "Black Bean Burger",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 380,
+"p": 18,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy",
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Grilled Salmon",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 350,
+"p": 34,
+"t": [
+"fish"
+],
+"a": "Fish",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Quinoa",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 7,
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Chicken Pot Pie",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 520,
+"p": 22,
+"t": [
+"dairy",
+"gluten"
+],
+"a": "Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Apple Pie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 3,
+"t": [
+"gluten",
+"dairy"
+],
+"a": "Gluten, Dairy"
+},
+{
+"v": 22,
+"n": "Pita",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 200,
+"p": 7,
+"t": [
+"gluten"
+],
+"a": "Gluten"
+},
+{
+"v": 22,
+"n": "Brown Rice",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 220,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Lemon Garlic Chicken",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 230,
+"p": 30,
+"mt": 1
+},
+{
+"v": 22,
+"n": "Falafel",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 250,
+"p": 9,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Feta",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 80,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 22,
+"n": "Cucumber",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 10,
+"p": 0,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Tzatziki",
+"c": "Dressings",
+"m": [
+"Lunch"
+],
+"k": 60,
+"p": 2,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Strawberry Shake",
+"c": "Shakes",
+"m": [
+"Dinner"
+],
+"k": 600,
+"p": 12,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Turkey Burger",
+"c": "Burgers",
+"m": [
+"Dinner"
+],
+"k": 450,
+"p": 30,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 38,
+"n": "Garden Salad",
+"c": "Salads",
+"m": [
+"Dinner"
+],
+"k": 120,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Berry Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Chicken Teriyaki Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 550,
+"p": 32,
+"t": [
+"soy",
+"gluten"
+],
+"a": "Soy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Fountain Drink",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 150,
+"p": 0
+},
+{
+"v": 8,
+"n": "Red Bull",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 110,
+"p": 0
+},
+{
+"v": 8,
+"n": "Bacon Breakfast Burrito",
+"c": "Wraps",
+"m": [
+"Breakfast"
+],
+"k": 599,
+"p": 32,
+"t": [
+"egg",
+"dairy",
+"gluten"
+],
+"a": "Egg, Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Grilled Chicken Wrap",
+"c": "Wraps",
+"m": [
+"Lunch/Dinner"
+],
+"k": 480,
+"p": 38,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 21,
+"n": "Caramel Latte",
+"c": "Espresso",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 8,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 21,
+"n": "Cold Brew",
+"c": "Coffee",
+"m": [
+"Dinner"
+],
+"k": 5,
+"p": 0
+},
+{
+"v": 58,
+"n": "Celsius",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 10,
+"p": 0
+},
+{
+"v": 58,
+"n": "Dasani Water",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 0,
+"p": 0
+},
+{
+"v": 58,
+"n": "Mystery Snack",
+"c": "Snacks",
+"m": [
+"Dinner"
+],
+"k": 100,
+"p": 1,
+"u": 1
+},
+{
+"v": 54,
+"n": "Protein Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 320,
+"p": 25,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+}
+],
+"2026-10-07": [
+{
+"v": 39,
+"n": "Roast Turkey",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 42,
+"mt": 1
+},
+{
+"v": 39,
+"n": "Mashed Potatoes",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Green Beans",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 60,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 39,
+"n": "Scrambled Eggs",
+"c": "Breakfast",
+"m": [
+"Breakfast"
+],
+"k": 200,
+"p": 14,
+"t": [
+"egg"
+],
+"a": "Egg"
+},
+{
+"v": 39,
+"n": "Chocolate Chip Cookie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 220,
+"p": 2,
+"t": [
+"dairy",
+"gluten",
+"egg"
+],
+"a": "Dairy, Gluten, Egg"
+},
+{
+"v": 39,
+"n": "Pasta Marinara",
+"c": "Pasta Bar",
+"m": [
+"Dinner"
+],
+"k": 400,
+"p": 12,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"d": [
+"vegetarian"
+]
+},
+{
+"v": 39,
+"n": "Black Bean Burger",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 380,
+"p": 18,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy",
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Grilled Salmon",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 350,
+"p": 34,
+"t": [
+"fish"
+],
+"a": "Fish",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Quinoa",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 7,
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Chicken Pot Pie",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 520,
+"p": 22,
+"t": [
+"dairy",
+"gluten"
+],
+"a": "Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Apple Pie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 3,
+"t": [
+"gluten",
+"dairy"
+],
+"a": "Gluten, Dairy"
+},
+{
+"v": 22,
+"n": "Pita",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 200,
+"p": 7,
+"t": [
+"gluten"
+],
+"a": "Gluten"
+},
+{
+"v": 22,
+"n": "Brown Rice",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 220,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Lemon Garlic Chicken",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 230,
+"p": 30,
+"mt": 1
+},
+{
+"v": 22,
+"n": "Falafel",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 250,
+"p": 9,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Feta",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 80,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 22,
+"n": "Cucumber",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 10,
+"p": 0,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Tzatziki",
+"c": "Dressings",
+"m": [
+"Lunch"
+],
+"k": 60,
+"p": 2,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Strawberry Shake",
+"c": "Shakes",
+"m": [
+"Dinner"
+],
+"k": 600,
+"p": 12,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Turkey Burger",
+"c": "Burgers",
+"m": [
+"Dinner"
+],
+"k": 450,
+"p": 30,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 38,
+"n": "Garden Salad",
+"c": "Salads",
+"m": [
+"Dinner"
+],
+"k": 120,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Berry Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Chicken Teriyaki Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 550,
+"p": 32,
+"t": [
+"soy",
+"gluten"
+],
+"a": "Soy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Fountain Drink",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 150,
+"p": 0
+},
+{
+"v": 8,
+"n": "Red Bull",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 110,
+"p": 0
+},
+{
+"v": 8,
+"n": "Bacon Breakfast Burrito",
+"c": "Wraps",
+"m": [
+"Breakfast"
+],
+"k": 599,
+"p": 32,
+"t": [
+"egg",
+"dairy",
+"gluten"
+],
+"a": "Egg, Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Grilled Chicken Wrap",
+"c": "Wraps",
+"m": [
+"Lunch/Dinner"
+],
+"k": 480,
+"p": 38,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 21,
+"n": "Caramel Latte",
+"c": "Espresso",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 8,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 21,
+"n": "Cold Brew",
+"c": "Coffee",
+"m": [
+"Dinner"
+],
+"k": 5,
+"p": 0
+},
+{
+"v": 58,
+"n": "Celsius",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 10,
+"p": 0
+},
+{
+"v": 58,
+"n": "Dasani Water",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 0,
+"p": 0
+},
+{
+"v": 58,
+"n": "Mystery Snack",
+"c": "Snacks",
+"m": [
+"Dinner"
+],
+"k": 100,
+"p": 1,
+"u": 1
+},
+{
+"v": 54,
+"n": "Protein Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 320,
+"p": 25,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Ramen Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 500,
+"p": 20,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy"
+}
+],
+"2026-10-08": [
+{
+"v": 39,
+"n": "Roast Turkey",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 42,
+"mt": 1
+},
+{
+"v": 39,
+"n": "Mashed Potatoes",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Green Beans",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 60,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 39,
+"n": "Scrambled Eggs",
+"c": "Breakfast",
+"m": [
+"Breakfast"
+],
+"k": 200,
+"p": 14,
+"t": [
+"egg"
+],
+"a": "Egg"
+},
+{
+"v": 39,
+"n": "Chocolate Chip Cookie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 220,
+"p": 2,
+"t": [
+"dairy",
+"gluten",
+"egg"
+],
+"a": "Dairy, Gluten, Egg"
+},
+{
+"v": 39,
+"n": "Pasta Marinara",
+"c": "Pasta Bar",
+"m": [
+"Dinner"
+],
+"k": 400,
+"p": 12,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"d": [
+"vegetarian"
+]
+},
+{
+"v": 39,
+"n": "Black Bean Burger",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 380,
+"p": 18,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy",
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Grilled Salmon",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 350,
+"p": 34,
+"t": [
+"fish"
+],
+"a": "Fish",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Quinoa",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 7,
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Chicken Pot Pie",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 520,
+"p": 22,
+"t": [
+"dairy",
+"gluten"
+],
+"a": "Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Apple Pie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 3,
+"t": [
+"gluten",
+"dairy"
+],
+"a": "Gluten, Dairy"
+},
+{
+"v": 22,
+"n": "Pita",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 200,
+"p": 7,
+"t": [
+"gluten"
+],
+"a": "Gluten"
+},
+{
+"v": 22,
+"n": "Brown Rice",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 220,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Lemon Garlic Chicken",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 230,
+"p": 30,
+"mt": 1
+},
+{
+"v": 22,
+"n": "Falafel",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 250,
+"p": 9,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Feta",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 80,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 22,
+"n": "Cucumber",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 10,
+"p": 0,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Tzatziki",
+"c": "Dressings",
+"m": [
+"Lunch"
+],
+"k": 60,
+"p": 2,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Strawberry Shake",
+"c": "Shakes",
+"m": [
+"Dinner"
+],
+"k": 600,
+"p": 12,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Turkey Burger",
+"c": "Burgers",
+"m": [
+"Dinner"
+],
+"k": 450,
+"p": 30,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 38,
+"n": "Garden Salad",
+"c": "Salads",
+"m": [
+"Dinner"
+],
+"k": 120,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Berry Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Chicken Teriyaki Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 550,
+"p": 32,
+"t": [
+"soy",
+"gluten"
+],
+"a": "Soy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Fountain Drink",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 150,
+"p": 0
+},
+{
+"v": 8,
+"n": "Red Bull",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 110,
+"p": 0
+},
+{
+"v": 8,
+"n": "Bacon Breakfast Burrito",
+"c": "Wraps",
+"m": [
+"Breakfast"
+],
+"k": 599,
+"p": 32,
+"t": [
+"egg",
+"dairy",
+"gluten"
+],
+"a": "Egg, Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Grilled Chicken Wrap",
+"c": "Wraps",
+"m": [
+"Lunch/Dinner"
+],
+"k": 480,
+"p": 38,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 21,
+"n": "Caramel Latte",
+"c": "Espresso",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 8,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 21,
+"n": "Cold Brew",
+"c": "Coffee",
+"m": [
+"Dinner"
+],
+"k": 5,
+"p": 0
+},
+{
+"v": 58,
+"n": "Celsius",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 10,
+"p": 0
+},
+{
+"v": 58,
+"n": "Dasani Water",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 0,
+"p": 0
+},
+{
+"v": 58,
+"n": "Mystery Snack",
+"c": "Snacks",
+"m": [
+"Dinner"
+],
+"k": 100,
+"p": 1,
+"u": 1
+},
+{
+"v": 54,
+"n": "Protein Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 320,
+"p": 25,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+}
+],
+"2026-10-09": [
+{
+"v": 39,
+"n": "Roast Turkey",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 42,
+"mt": 1
+},
+{
+"v": 39,
+"n": "Mashed Potatoes",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Green Beans",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 60,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 39,
+"n": "Scrambled Eggs",
+"c": "Breakfast",
+"m": [
+"Breakfast"
+],
+"k": 200,
+"p": 14,
+"t": [
+"egg"
+],
+"a": "Egg"
+},
+{
+"v": 39,
+"n": "Chocolate Chip Cookie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 220,
+"p": 2,
+"t": [
+"dairy",
+"gluten",
+"egg"
+],
+"a": "Dairy, Gluten, Egg"
+},
+{
+"v": 39,
+"n": "Pasta Marinara",
+"c": "Pasta Bar",
+"m": [
+"Dinner"
+],
+"k": 400,
+"p": 12,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"d": [
+"vegetarian"
+]
+},
+{
+"v": 39,
+"n": "Black Bean Burger",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 380,
+"p": 18,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy",
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Grilled Salmon",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 350,
+"p": 34,
+"t": [
+"fish"
+],
+"a": "Fish",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Quinoa",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 7,
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Chicken Pot Pie",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 520,
+"p": 22,
+"t": [
+"dairy",
+"gluten"
+],
+"a": "Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Apple Pie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 3,
+"t": [
+"gluten",
+"dairy"
+],
+"a": "Gluten, Dairy"
+},
+{
+"v": 22,
+"n": "Pita",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 200,
+"p": 7,
+"t": [
+"gluten"
+],
+"a": "Gluten"
+},
+{
+"v": 22,
+"n": "Brown Rice",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 220,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Lemon Garlic Chicken",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 230,
+"p": 30,
+"mt": 1
+},
+{
+"v": 22,
+"n": "Falafel",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 250,
+"p": 9,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Feta",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 80,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 22,
+"n": "Cucumber",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 10,
+"p": 0,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Tzatziki",
+"c": "Dressings",
+"m": [
+"Lunch"
+],
+"k": 60,
+"p": 2,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Strawberry Shake",
+"c": "Shakes",
+"m": [
+"Dinner"
+],
+"k": 600,
+"p": 12,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Turkey Burger",
+"c": "Burgers",
+"m": [
+"Dinner"
+],
+"k": 450,
+"p": 30,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 38,
+"n": "Garden Salad",
+"c": "Salads",
+"m": [
+"Dinner"
+],
+"k": 120,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Berry Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Chicken Teriyaki Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 550,
+"p": 32,
+"t": [
+"soy",
+"gluten"
+],
+"a": "Soy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Fountain Drink",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 150,
+"p": 0
+},
+{
+"v": 8,
+"n": "Red Bull",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 110,
+"p": 0
+},
+{
+"v": 8,
+"n": "Bacon Breakfast Burrito",
+"c": "Wraps",
+"m": [
+"Breakfast"
+],
+"k": 599,
+"p": 32,
+"t": [
+"egg",
+"dairy",
+"gluten"
+],
+"a": "Egg, Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Grilled Chicken Wrap",
+"c": "Wraps",
+"m": [
+"Lunch/Dinner"
+],
+"k": 480,
+"p": 38,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 21,
+"n": "Caramel Latte",
+"c": "Espresso",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 8,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 21,
+"n": "Cold Brew",
+"c": "Coffee",
+"m": [
+"Dinner"
+],
+"k": 5,
+"p": 0
+},
+{
+"v": 58,
+"n": "Celsius",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 10,
+"p": 0
+},
+{
+"v": 58,
+"n": "Dasani Water",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 0,
+"p": 0
+},
+{
+"v": 58,
+"n": "Mystery Snack",
+"c": "Snacks",
+"m": [
+"Dinner"
+],
+"k": 100,
+"p": 1,
+"u": 1
+},
+{
+"v": 54,
+"n": "Protein Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 320,
+"p": 25,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+}
+],
+"2026-10-10": [
+{
+"v": 39,
+"n": "Roast Turkey",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 42,
+"mt": 1
+},
+{
+"v": 39,
+"n": "Mashed Potatoes",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Green Beans",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 60,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 39,
+"n": "Scrambled Eggs",
+"c": "Breakfast",
+"m": [
+"Breakfast"
+],
+"k": 200,
+"p": 14,
+"t": [
+"egg"
+],
+"a": "Egg"
+},
+{
+"v": 39,
+"n": "Chocolate Chip Cookie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 220,
+"p": 2,
+"t": [
+"dairy",
+"gluten",
+"egg"
+],
+"a": "Dairy, Gluten, Egg"
+},
+{
+"v": 39,
+"n": "Pasta Marinara",
+"c": "Pasta Bar",
+"m": [
+"Dinner"
+],
+"k": 400,
+"p": 12,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"d": [
+"vegetarian"
+]
+},
+{
+"v": 39,
+"n": "Black Bean Burger",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 380,
+"p": 18,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy",
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Grilled Salmon",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 350,
+"p": 34,
+"t": [
+"fish"
+],
+"a": "Fish",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Quinoa",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 7,
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Chicken Pot Pie",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 520,
+"p": 22,
+"t": [
+"dairy",
+"gluten"
+],
+"a": "Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Apple Pie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 3,
+"t": [
+"gluten",
+"dairy"
+],
+"a": "Gluten, Dairy"
+},
+{
+"v": 22,
+"n": "Pita",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 200,
+"p": 7,
+"t": [
+"gluten"
+],
+"a": "Gluten"
+},
+{
+"v": 22,
+"n": "Brown Rice",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 220,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Lemon Garlic Chicken",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 230,
+"p": 30,
+"mt": 1
+},
+{
+"v": 22,
+"n": "Falafel",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 250,
+"p": 9,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Feta",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 80,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 22,
+"n": "Cucumber",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 10,
+"p": 0,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Tzatziki",
+"c": "Dressings",
+"m": [
+"Lunch"
+],
+"k": 60,
+"p": 2,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Strawberry Shake",
+"c": "Shakes",
+"m": [
+"Dinner"
+],
+"k": 600,
+"p": 12,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Turkey Burger",
+"c": "Burgers",
+"m": [
+"Dinner"
+],
+"k": 450,
+"p": 30,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 38,
+"n": "Garden Salad",
+"c": "Salads",
+"m": [
+"Dinner"
+],
+"k": 120,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Berry Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Chicken Teriyaki Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 550,
+"p": 32,
+"t": [
+"soy",
+"gluten"
+],
+"a": "Soy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Fountain Drink",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 150,
+"p": 0
+},
+{
+"v": 8,
+"n": "Red Bull",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 110,
+"p": 0
+},
+{
+"v": 8,
+"n": "Bacon Breakfast Burrito",
+"c": "Wraps",
+"m": [
+"Breakfast"
+],
+"k": 599,
+"p": 32,
+"t": [
+"egg",
+"dairy",
+"gluten"
+],
+"a": "Egg, Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Grilled Chicken Wrap",
+"c": "Wraps",
+"m": [
+"Lunch/Dinner"
+],
+"k": 480,
+"p": 38,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 21,
+"n": "Caramel Latte",
+"c": "Espresso",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 8,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 21,
+"n": "Cold Brew",
+"c": "Coffee",
+"m": [
+"Dinner"
+],
+"k": 5,
+"p": 0
+},
+{
+"v": 58,
+"n": "Celsius",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 10,
+"p": 0
+},
+{
+"v": 58,
+"n": "Dasani Water",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 0,
+"p": 0
+},
+{
+"v": 58,
+"n": "Mystery Snack",
+"c": "Snacks",
+"m": [
+"Dinner"
+],
+"k": 100,
+"p": 1,
+"u": 1
+},
+{
+"v": 54,
+"n": "Protein Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 320,
+"p": 25,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+}
+],
+"2026-10-11": [
+{
+"v": 39,
+"n": "Roast Turkey",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 42,
+"mt": 1
+},
+{
+"v": 39,
+"n": "Mashed Potatoes",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 39,
+"n": "Green Beans",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 60,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 39,
+"n": "Scrambled Eggs",
+"c": "Breakfast",
+"m": [
+"Breakfast"
+],
+"k": 200,
+"p": 14,
+"t": [
+"egg"
+],
+"a": "Egg"
+},
+{
+"v": 39,
+"n": "Chocolate Chip Cookie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 220,
+"p": 2,
+"t": [
+"dairy",
+"gluten",
+"egg"
+],
+"a": "Dairy, Gluten, Egg"
+},
+{
+"v": 39,
+"n": "Pasta Marinara",
+"c": "Pasta Bar",
+"m": [
+"Dinner"
+],
+"k": 400,
+"p": 12,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"d": [
+"vegetarian"
+]
+},
+{
+"v": 39,
+"n": "Black Bean Burger",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 380,
+"p": 18,
+"t": [
+"gluten",
+"soy"
+],
+"a": "Gluten, Soy",
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Grilled Salmon",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 350,
+"p": 34,
+"t": [
+"fish"
+],
+"a": "Fish",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Quinoa",
+"c": "Sides",
+"m": [
+"Dinner"
+],
+"k": 180,
+"p": 7,
+"d": [
+"vegan"
+]
+},
+{
+"v": 30,
+"n": "Chicken Pot Pie",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 520,
+"p": 22,
+"t": [
+"dairy",
+"gluten"
+],
+"a": "Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 30,
+"n": "Apple Pie",
+"c": "Desserts",
+"m": [
+"Dinner"
+],
+"k": 300,
+"p": 3,
+"t": [
+"gluten",
+"dairy"
+],
+"a": "Gluten, Dairy"
+},
+{
+"v": 22,
+"n": "Pita",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 200,
+"p": 7,
+"t": [
+"gluten"
+],
+"a": "Gluten"
+},
+{
+"v": 22,
+"n": "Brown Rice",
+"c": "Base Options",
+"m": [
+"Lunch"
+],
+"k": 220,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Lemon Garlic Chicken",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 230,
+"p": 30,
+"mt": 1
+},
+{
+"v": 22,
+"n": "Falafel",
+"c": "Protein Options",
+"m": [
+"Lunch"
+],
+"k": 250,
+"p": 9,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Feta",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 80,
+"p": 4,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 22,
+"n": "Cucumber",
+"c": "Toppings",
+"m": [
+"Lunch"
+],
+"k": 10,
+"p": 0,
+"d": [
+"vegan"
+]
+},
+{
+"v": 22,
+"n": "Tzatziki",
+"c": "Dressings",
+"m": [
+"Lunch"
+],
+"k": 60,
+"p": 2,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Strawberry Shake",
+"c": "Shakes",
+"m": [
+"Dinner"
+],
+"k": 600,
+"p": 12,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 38,
+"n": "Turkey Burger",
+"c": "Burgers",
+"m": [
+"Dinner"
+],
+"k": 450,
+"p": 30,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 38,
+"n": "Garden Salad",
+"c": "Salads",
+"m": [
+"Dinner"
+],
+"k": 120,
+"p": 3,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Berry Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 5,
+"d": [
+"vegan"
+]
+},
+{
+"v": 11,
+"n": "Chicken Teriyaki Bowl",
+"c": "Entree",
+"m": [
+"Dinner"
+],
+"k": 550,
+"p": 32,
+"t": [
+"soy",
+"gluten"
+],
+"a": "Soy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Fountain Drink",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 150,
+"p": 0
+},
+{
+"v": 8,
+"n": "Red Bull",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 110,
+"p": 0
+},
+{
+"v": 8,
+"n": "Bacon Breakfast Burrito",
+"c": "Wraps",
+"m": [
+"Breakfast"
+],
+"k": 599,
+"p": 32,
+"t": [
+"egg",
+"dairy",
+"gluten"
+],
+"a": "Egg, Dairy, Gluten",
+"mt": 1
+},
+{
+"v": 8,
+"n": "Grilled Chicken Wrap",
+"c": "Wraps",
+"m": [
+"Lunch/Dinner"
+],
+"k": 480,
+"p": 38,
+"t": [
+"gluten"
+],
+"a": "Gluten",
+"mt": 1
+},
+{
+"v": 21,
+"n": "Caramel Latte",
+"c": "Espresso",
+"m": [
+"Dinner"
+],
+"k": 250,
+"p": 8,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+},
+{
+"v": 21,
+"n": "Cold Brew",
+"c": "Coffee",
+"m": [
+"Dinner"
+],
+"k": 5,
+"p": 0
+},
+{
+"v": 58,
+"n": "Celsius",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 10,
+"p": 0
+},
+{
+"v": 58,
+"n": "Dasani Water",
+"c": "Beverages",
+"m": [
+"Dinner"
+],
+"k": 0,
+"p": 0
+},
+{
+"v": 58,
+"n": "Mystery Snack",
+"c": "Snacks",
+"m": [
+"Dinner"
+],
+"k": 100,
+"p": 1,
+"u": 1
+},
+{
+"v": 54,
+"n": "Protein Smoothie",
+"c": "Smoothies",
+"m": [
+"Dinner"
+],
+"k": 320,
+"p": 25,
+"t": [
+"dairy"
+],
+"a": "Dairy"
+}
+]
+}
+}

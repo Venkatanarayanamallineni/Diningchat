@@ -29,6 +29,9 @@ jobs:
         with:
           python-version: "3.12"
 
+      - name: Check answers (tests/run.js)
+        run: node tests/run.js
+
       - run: pip install -r requirements.txt
 
       - name: Fetch ISU Dining data
