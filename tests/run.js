@@ -67,6 +67,8 @@ const CASES = [
   {ask: ['cheesy'], not: ['Not sure', 'Couldn’t find']},
   {ask: ['lunch'], has: ['Lunch today']},
   {ask: ['halal food'], has: ['can’t confirm halal']},
+  {ask: ['coffee tomorrow'], has: ['The Roasterie', 'Caramel Latte']},
+  {ask: ['energy drinks tomorrow'], has: ['Red Bull', 'The Roasterie']},
   {ask: ['places open after 9pm'], has: ['open after 9 PM tonight', 'Friley Windows', 'East Side Market', 'Hawthorn'], not: ['Clyde', 'Plato']},
   {ask: ['what is open after 9'], has: ['after 9 PM'], not: ['Clyde']},
   {ask: ['is udm open at 7am tomorrow'], has: ['Yes', 'Union Drive']},
