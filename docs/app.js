@@ -195,6 +195,26 @@ function lev(a, b) {
   }
   return prev[b.length];
 }
+// time words: keep them out of typo fixing and food words
+['after', 'past', 'before', 'until', 'till', 'midnight', 'noon', 'later', 'earlier', 'am', 'pm'].forEach(w => STOP.add(w));
+// "open after 9pm", "open at 7", "till midnight" -> {op, mins}
+function parseTime(t) {
+  const m = t.match(/ (after|past|later than|at|by|around|before|earlier than|till|until) (?:(midnight|noon)|(\d{1,2})(?: (\d{2}))?(?: ?(am|pm))?)(?= )/);
+  if (!m) return null;
+  const op = /after|past|later/.test(m[1]) ? 'after' : /before|earlier/.test(m[1]) ? 'before' : /till|until/.test(m[1]) ? 'till' : 'at';
+  if (m[2]) return {op, mins: m[2] === 'noon' ? 720 : 1440};
+  let h = +m[3];
+  const min = +(m[4] || 0);
+  if (h > 24 || min > 59) return null;
+  if (m[5] === 'pm' && h < 12) h += 12;
+  else if (m[5] === 'am' && h === 12) h = 0;
+  // no am/pm: 1-6 is evening; 7-11 is evening for "after"/"till", morning for "at"/"before"
+  else if (!m[5] && (h <= 6 || (h <= 11 && (op === 'after' || op === 'till' || / (tonight|night|evening|late) /.test(t))))) h += 12;
+  return {op, mins: h * 60 + min};
+}
+const minToHM = m => m >= 1440 ? '23:59' : `${String(Math.floor(m / 60)).padStart(2, '0')}:${String(m % 60).padStart(2, '0')}`;
+const timeLabel = m => m >= 1440 ? 'midnight' : m === 720 ? 'noon' : fmt(minToHM(m));
+
 function fixWord(w) {
   if (w.length < 4 || /\d/.test(w) || STOP.has(w) || VOCAB.has(w) || KEYWORDS.includes(w)) return w;
   const x = w.replace(/(.)\1{2,}/g, '$1$1');  // tommorrrow -> tommorrow
@@ -215,6 +235,7 @@ function parse(text) {
   q.dayExplicit = !!q.day;
   q.day = q.day || today;
   for (const m of Object.keys(MEALS)) if (t.includes(` ${m} `)) q.meal = m;
+  q.atTime = parseTime(t);
 
   let m;
   if ((m = t.match(/(\d{1,3})\s*(?:g|gm|gms|grams?)?\s*(?:of\s+)?protein/)) || (m = t.match(/protein\s*(?:of|over|above|at least|min|>)?\s*(\d{1,3})/))) q.minP = +m[1];
@@ -249,6 +270,7 @@ function parse(text) {
     !WEEKDAYS.includes(w) && !(w in MEALS) && !allergenWords.includes(w));
   q.unknown = q.food.filter(w => VOCAB.size && !VOCAB.has(w) && !VOCAB.has(w.replace(/e?s$/, '')));
   if (VOCAB.size) q.food = q.food.filter(w => !q.unknown.includes(w));
+  if (q.atTime && !q.wantPlan && !q.food.length) q.wantHours = true;  // "places after 9pm"
   return q;
 }
 
@@ -362,6 +384,33 @@ function answerOpenNow(q) {
   else if (closing.length) say += ` ${closing.length} close within 45 min.`;
   return {say, html: rowCard(open.map(x => `<div class="row"><span>${vlink(x.v)}</span>${statusBadge(x.st)}</div>`)),
     chips: ['High protein meal under 700 cal', 'What’s open late?']};
+}
+
+// "open after 9pm", "is udm open at 7am", "open till midnight", "open before 8"
+function answerOpenAt(q) {
+  const {op, mins} = q.atTime, day = q.day, today = ames().date;
+  const end = w => w.e === '23:59' ? 1440 : toMin(w.e);
+  const fits = w => w.all_day || (op === 'after' ? end(w) > mins : op === 'till' ? end(w) >= mins
+    : op === 'before' ? toMin(w.s) < mins : toMin(w.s) <= mins && end(w) > mins);
+  const span = w => w.all_day ? 'all day' : op === 'after' || op === 'till' ? `till ${timeLabel(end(w))}` : `${fmt(w.s)}–${fmt(w.e)}`;
+  const opWord = {after: 'after', till: 'till', before: 'before', at: 'at'}[op];
+  const when = day === today ? (mins >= 1020 ? 'tonight' : 'today') : dayLabel(day);
+  const label = `${opWord} ${timeLabel(mins)} ${when}`;
+  if (q.venue) {
+    const v = q.venue, n = esc(vname(v)), w = windows(day, v).filter(fits);
+    if (w.length) return {say: `Yes, <b>${n}</b> is open ${label}: <b>${esc(span(w[w.length - 1]))}</b>.`, chips: [`What’s at ${vname(v)}?`, 'What’s open now?']};
+    const h = hoursText(day, v);
+    return {say: `No, <b>${n}</b> isn’t open ${label}. ${h === 'Closed' ? `Closed ${dayLabel(day)}.` : `Hours: ${esc(h)}.`}`, chips: ['What’s open now?']};
+  }
+  const rows = VIDS().map(v => ({v, w: windows(day, v).filter(fits)})).filter(x => x.w.length);
+  if (!rows.length) return {say: `Nothing is open ${label}.`, chips: ['What’s open now?', 'What’s open late?']};
+  const key = x => op === 'before' ? -toMin(x.w[0].s || '00:00') : end(x.w[x.w.length - 1]) + (x.w[0].all_day ? 2000 : 0);
+  rows.sort((a, b) => key(b) - key(a));
+  const pick = x => op === 'before' ? x.w[0] : x.w[x.w.length - 1];
+  return {say: `<b>${rows.length} place${rows.length > 1 ? 's' : ''}</b> open ${label}:`,
+    html: rowCard(rows.map(x => `<div class="row"><span>${vlink(x.v)}</span><span class="dim">${esc(span(pick(x)))}</span></div>`)),
+    chips: ['What’s open now?', op === 'before' || mins >= 1380 ? 'What’s open late?'
+      : `Open ${opWord} ${timeLabel(mins + 60)}${day === today ? '' : ' ' + shortDay(day).toLowerCase()}`]};
 }
 
 function answerVenueHours(q) {
@@ -740,6 +789,7 @@ async function route(q) {
   if (q.pay) return answerPay(q);
   if (q.near && !q.wantPlan && !q.food.length && !detectGroup(q.t)) return answerOpenNow(q);
   if (q.wantPlan && !(q.wantHours && !q.maxK && !q.minP)) return answerPlan(q);
+  if (q.wantHours && q.atTime) return answerOpenAt(q);
   if (q.wantHours && q.venue) return answerVenueHours(q);
   if (q.wantHours) {
     if (q.dayExplicit && q.day !== ames().date) {
